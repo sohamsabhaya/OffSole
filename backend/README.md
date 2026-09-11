@@ -1,66 +1,72 @@
-# OffSole — Backend API ⚙️
+# OffSole — Backend API
 
-[![GitHub Repository](https://img.shields.io/badge/GitHub-sohamsabhaya%2FOffSole-181717?style=flat&logo=github)](https://github.com/sohamsabhaya/OffSole)
-
-FastAPI-powered asynchronous REST API for the **OffSole** sneaker e-commerce platform. Integrates with MongoDB Atlas, handles JWT authentication via secure cookies, product inventory, shopping carts, order checkouts, and admin sales analytics.
-
-- **Main Repository**: [https://github.com/sohamsabhaya/OffSole](https://github.com/sohamsabhaya/OffSole)
+FastAPI REST API service for the OffSole sneaker e-commerce platform. Handles MongoDB Atlas persistence, JWT-based authentication via HTTP-only cookies, catalog operations, cart lifecycle, order processing, and administrative analytics.
 
 ---
 
-## 🛠️ Tech Stack & Dependencies
+## Core Components
 
-- **FastAPI** — High-performance Python web framework for APIs.
-- **Motor** — Asynchronous Python driver for MongoDB.
-- **Pydantic v2** — Data parsing, schema definition, and validation.
-- **passlib + bcrypt** — Robust password hashing.
-- **python-jose** — JWT token encoding and signature validation.
-- **Uvicorn** — Lightning-fast ASGI web server implementation.
-- **python-multipart** — Form data parser for file/image uploads.
+- **Authentication & Security**: Password hashing with Passlib/Bcrypt, signed JWT issuance and verification, role-based access dependencies (get_current_user, get_current_admin_user).
+- **Product Management**: Filterable catalog queries, pagination, and administrative CRUD operations.
+- **Cart & Orders**: User-associated cart persistence, quantity tracking, and order creation with transaction logs.
+- **Admin Analytics**: Aggregated metrics across revenue, order counts, brand distributions, gender categories, and monthly trends.
 
 ---
 
-## 📁 Directory Layout
+## Tech Stack
+
+- **FastAPI**: Asynchronous web framework
+- **Motor / PyMongo**: Async MongoDB driver
+- **Pydantic v2**: Data validation and serialization
+- **Passlib & Bcrypt**: Password hashing
+- **Python-Jose**: JWT management
+- **Uvicorn**: ASGI application server
+
+---
+
+## Project Structure
 
 `	ext
 backend/
-|-- app/
-|   |-- core/
-|   |   |-- config.py         # Application configuration & settings
-|   |   |-- database.py       # MongoDB client & collection handles
-|   |   |-- deps.py           # Dependency injection for auth & admin checks
-|   |   -- security.py       # Passlib hashing & JWT helpers
-|   |-- crud/
-|   |   |-- product.py        # Database operations for products
-|   |   -- order.py          # Database operations for orders & logs
-|   |-- routers/
-|   |   |-- admin.py          # /api/admin/* (Metrics, charts, product CRUD)
-|   |   |-- auth.py           # /api/auth/* (Register, login, me, delete account)
-|   |   |-- cart.py           # /api/cart/* (Get cart, add, update, remove, checkout)
-|   |   -- products.py       # /api/products/* (Catalog listing, filtering, detail)
-|   |-- schemas/
-|   |   |-- admin.py          # Admin analytics response schemas
-|   |   |-- auth.py           # Auth payload & user response schemas
-|   |   |-- cart.py           # Cart & cart-item models
-|   |   |-- orders.py         # Order & transaction schemas
-|   |   -- product.py        # Product schemas
-|   -- main.py               # Application factory & middleware setup
-|-- media/                    # Static image directory
-|-- requirements.txt          # Python package requirements
-|-- .env.example              # Sample environment variables
--- README.md                 # Backend documentation
+├── app/
+│   ├── core/
+│   │   ├── config.py         # Application settings loaded from .env
+│   │   ├── database.py       # MongoDB client and collection handles
+│   │   ├── deps.py           # Dependency injection for auth and roles
+│   │   └── security.py       # Password hashing and token utilities
+│   ├── crud/
+│   │   ├── cart.py           # Cart database operations
+│   │   ├── order.py          # Order and transaction log queries
+│   │   ├── product.py        # Product catalog queries
+│   │   └── user.py           # User account queries
+│   ├── routers/
+│   │   ├── admin.py          # /api/admin endpoints (analytics, logs, CRUD)
+│   │   ├── auth.py           # /api/auth endpoints (login, register, me, delete)
+│   │   ├── cart.py           # /api/cart endpoints (cart management, checkout)
+│   │   └── products.py       # /api/products endpoints (catalog listing, details)
+│   ├── schemas/
+│   │   ├── admin.py          # Pydantic schemas for analytics and dashboards
+│   │   ├── auth.py           # Schemas for user registration and auth responses
+│   │   ├── cart.py           # Schemas for cart items and payloads
+│   │   ├── orders.py         # Schemas for order records and transactions
+│   │   └── product.py        # Schemas for product models
+│   └── main.py               # FastAPI application setup and middleware
+├── media/                    # Static image directory for product assets
+├── requirements.txt          # Python dependencies
+├── .env.example              # Sample environment configuration
+└── README.md
 `
 
 ---
 
-## ⚙️ Environment Variables
+## Environment Variables
 
-Create a .env file inside the ackend/ directory:
+Create a .env file in the ackend/ directory:
 
 `env
 MONGODB_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/offsole?retryWrites=true&w=majority
 DATABASE_NAME=offsole
-SECRET_KEY=your_secret_key_change_in_production
+SECRET_KEY=your_secure_secret_key_here
 ACCESS_TOKEN_EXPIRE_MINUTES=1440
 ALLOWED_ORIGINS=http://localhost:3000
 MEDIA_DIR=media
@@ -68,47 +74,23 @@ MEDIA_DIR=media
 
 ---
 
-## 🚀 Running the Server
+## Running Locally
 
 `ash
-# 1. Activate virtual environment
+# Activate virtual environment
 # Windows:
-venv\Scripts\activate
-# macOS/Linux:
-# source venv/bin/activate
+.\venv\Scripts\Activate.ps1
+# Linux / macOS:
+source venv/bin/activate
 
-# 2. Run with uvicorn
+# Start server
 uvicorn app.main:app --reload --port 8000
 `
 
 ---
 
-## 📡 API Endpoints Overview
+## API Documentation
 
-### Authentication (/api/auth)
-- POST /api/auth/register — Register a new customer account.
-- POST /api/auth/login — Authenticate and set HTTP-only JWT cookie.
-- POST /api/auth/logout — Clear auth cookie.
-- GET /api/auth/me — Get current user profile.
-- DELETE /api/auth/delete-account — Delete current user account and clean up cart.
-
-### Products (/api/products)
-- GET /api/products — List products with filters (rand, category, gender, color, sort, search).
-- GET /api/products/{id} — Get single product details.
-
-### Cart & Orders (/api/cart)
-- GET /api/cart — View user's current shopping cart.
-- POST /api/cart/items — Add an item (with size) to cart.
-- PUT /api/cart/items/{item_id} — Update item quantity.
-- DELETE /api/cart/items/{item_id} — Remove item from cart.
-- POST /api/cart/checkout — Checkout cart and create order record.
-
-### Admin (/api/admin)
-- GET /api/admin/metrics — Aggregate summary (revenue, orders, units sold, AOV).
-- GET /api/admin/sales-analytics — Chart data for brand, gender, color, and monthly sales.
-- GET /api/admin/sales-log — Paginated list of recent purchases.
-- POST /api/admin/products — Create a new product.
-- PUT /api/admin/products/{id} — Update an existing product.
-- DELETE /api/admin/products/{id} — Delete a product.
-
-Interactive Swagger documentation is available at http://localhost:8000/docs.
+Once the server is running, interactive API documentation is available at:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc

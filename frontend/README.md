@@ -1,90 +1,85 @@
-# OffSole — Frontend 🎨
+# OffSole — Frontend
 
-[![GitHub Repository](https://img.shields.io/badge/GitHub-sohamsabhaya%2FOffSole-181717?style=flat&logo=github)](https://github.com/sohamsabhaya/OffSole)
-
-The user-facing web application and Admin Dashboard for **OffSole**, built with **React 18** and styled with **Bootstrap 5** and custom CSS.
-
-- **Main Repository**: [https://github.com/sohamsabhaya/OffSole](https://github.com/sohamsabhaya/OffSole)
+Single Page Application (SPA) for the OffSole sneaker e-commerce platform and Admin Dashboard, built with React 18, React Router v6, and Bootstrap 5.
 
 ---
 
-## 🛠️ Features & Tech Stack
+## Overview
 
-- **React 18** & **React Router v6** — Single page application routing and state management.
-- **Bootstrap 5 + Bootstrap Icons** — Clean, responsive, human-crafted modern UI layout.
-- **Recharts** — Responsive charting library for admin sales analytics (Pie, Bar, Area charts).
-- **Axios** — API communication with automatic cookie handling (withCredentials: true).
-- **Context API** — Global state management for User Auth and Shopping Cart.
+- **User Storefront**: Responsive shopping experience with catalog filtering, detailed product views, and persistent cart checkout.
+- **Admin Dashboard**: Analytics dashboard featuring KPI summaries, interactive charts (Recharts), recent transactions log, and product inventory management.
+- **State Management**: React Context API for global authentication (AuthContext) and shopping cart (CartContext).
+- **HTTP Client**: Axios instance configured with withCredentials: true for secure cookie-based session management.
 
 ---
 
-## 📁 Directory Layout
+## Project Structure
 
 `	ext
 frontend/
-|-- public/
-|   |-- images/               # Hero & promotional banner images
-|   |-- media/                # Cached sneaker asset images
-|   |-- index.html            # HTML shell with Google Fonts & Bootstrap
-|   -- favicon.ico
-|-- src/
-|   |-- api/
-|   |   |-- client.js         # Base Axios client with baseURL and credentials
-|   |   |-- authService.js    # Auth & user lifecycle API calls
-|   |   |-- productService.js # Product catalog & search API calls
-|   |   |-- cartService.js    # Shopping cart & checkout API calls
-|   |   -- adminService.js   # Admin analytics, logs & product CRUD API calls
-|   |-- components/
-|   |   |-- common/           # Reusable loaders, price summaries, modals
-|   |   |-- features/         # ProductCard and feature components
-|   |   |-- Navbar.js         # Navigation header with cart badge and admin indicator
-|   |   -- Footer.js         # Modern site footer
-|   |-- context/
-|   |   |-- AuthContext.js    # Authentication context & actions (login, logout, delete)
-|   |   -- CartContext.js    # Shopping cart state & actions (add, update, remove, clear)
-|   |-- pages/
-|   |   |-- Home.js           # Landing page with hero banner & featured drops
-|   |   |-- Products.js       # Product catalog with interactive multi-filter sidebar
-|   |   |-- ProductDetail.js  # Product page with gallery, size picker, and cart CTA
-|   |   |-- Cart.js           # Shopping cart breakdown
-|   |   |-- Checkout.js       # Checkout and address entry
-|   |   |-- OrderSuccess.js   # Post-purchase confirmation page
-|   |   |-- Orders.js         # User order history
-|   |   |-- AdminDashboard.js # Admin dashboard (KPIs, Charts, Orders Log, Product CRUD)
-|   |   |-- Login.js          # User login form
-|   |   |-- Signup.js         # User registration form
-|   |   |-- About.js          # Brand story page
-|   |   -- Contact.js        # Support & contact page
-|   |-- utils/
-|   |   |-- formatters.js     # Currency and date formatters
-|   |   -- validators.js     # Form input validators
-|   |-- App.js                # Application routing layout
-|   |-- App.css
-|   |-- index.js              # React DOM entry
-|   -- index.css             # Custom styling and theme variables
-|-- package.json
--- README.md
+├── public/
+│   ├── images/               # Promotional and carousel imagery
+│   ├── media/                # Local sneaker preview assets
+│   ├── index.html            # Main HTML entry file
+│   └── favicon.ico
+├── src/
+│   ├── api/
+│   │   ├── client.js         # Axios base client
+│   │   ├── authService.js    # Authentication API calls
+│   │   ├── productService.js # Product catalog API calls
+│   │   ├── cartService.js    # Shopping cart and checkout API calls
+│   │   └── adminService.js   # Admin metrics and inventory API calls
+│   ├── components/
+│   │   ├── common/           # Reusable loaders, modals, and price widgets
+│   │   ├── features/         # ProductCard and storefront components
+│   │   ├── Navbar.js         # Header navigation with cart and admin links
+│   │   └── Footer.js         # Site footer
+│   ├── context/
+│   │   ├── AuthContext.js    # User state, login, logout, account deletion
+│   │   └── CartContext.js    # Cart state, item counters, add/remove actions
+│   ├── pages/
+│   │   ├── Home.js           # Homepage with hero and featured releases
+│   │   ├── Products.js       # Searchable and filterable catalog
+│   │   ├── ProductDetail.js  # Product information and size selection
+│   │   ├── Cart.js           # Shopping cart view
+│   │   ├── Checkout.js       # Order checkout and shipping details
+│   │   ├── OrderSuccess.js   # Confirmation screen
+│   │   ├── Orders.js         # User order history
+│   │   ├── AdminDashboard.js # Analytics charts, orders table, product CRUD
+│   │   ├── Login.js          # Sign in view
+│   │   ├── Signup.js         # Account creation view
+│   │   ├── About.js          # Brand story
+│   │   └── Contact.js        # Contact and inquiry page
+│   ├── utils/
+│   │   ├── formatters.js     # Currency and date formatting
+│   │   └── validators.js     # Form validation utilities
+│   ├── App.js                # Application route definitions
+│   ├── App.css
+│   ├── index.js              # Application root
+│   └── index.css             # Theme styling and customizations
+├── package.json
+└── README.md
 `
 
 ---
 
-## 🚀 Getting Started
+## Setup & Running
 
 `ash
-# 1. Install dependencies
+# Install dependencies
 npm install
 
-# 2. Start development server
+# Start development server
 npm start
 `
 
-The app will open automatically at [http://localhost:3000](http://localhost:3000).
+The application runs on http://localhost:3000 by default.
 
 ---
 
-## 🌐 Environment Configuration
+## Environment Configuration
 
-The frontend communicates with the backend via http://localhost:8000. You can configure the API URL in src/api/client.js or via .env:
+Backend API location can be configured in .env:
 
 `env
 REACT_APP_API_URL=http://localhost:8000
