@@ -1,4 +1,3 @@
-from bson import ObjectId
 from fastapi import Depends, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from motor.motor_asyncio import AsyncIOMotorDatabase
@@ -6,6 +5,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from app.config import settings
 from app.core.exceptions import ForbiddenError, UnauthorizedError
 from app.core.security import decode_access_token
+from app.crud.user import get_user_by_id, get_user_by_username
 from app.database import get_database
 
 security_bearer = HTTPBearer(auto_error=False)
@@ -41,12 +41,9 @@ async def get_current_user_optional(
     if not user_id_or_username:
         return None
 
-    user = None
-    if ObjectId.is_valid(user_id_or_username):
-        user = await db.users.find_one({"_id": ObjectId(user_id_or_username)})
-
+    user = await get_user_by_id(db, user_id_or_username)
     if not user:
-        user = await db.users.find_one({"username": user_id_or_username})
+        user = await get_user_by_username(db, user_id_or_username)
 
     return user
 
