@@ -1,40 +1,46 @@
-import os
-from functools import lru_cache
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    """
-    Application Settings loaded from .env file or environment variables.
-    Pydantic ensures type validation on startup.
-    """
-    APP_NAME: str = "OffSole API"
-    APP_VERSION: str = "1.0.0"
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+
+    PROJECT_NAME: str = "OffSole"
+    VERSION: str = "1.0.0"
+    API_V1_PREFIX: str = "/api/v1"
+    ENV: str = "development"
     DEBUG: bool = True
 
-    # MongoDB Atlas Connection
-    MONGODB_URI: str = "mongodb+srv://sohams2627_db_user:D8mzsmhAFgtVF7pN@cluster0.opqpfjx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-    MONGODB_DB_NAME: str = "offsole"
+    MONGODB_URL: str = "mongodb://localhost:27017"
+    DATABASE_NAME: str = "offsole"
 
-    # JWT Authentication
-    SECRET_KEY: str = "dev-secret-key-change-in-production-1234567890"
+    SECRET_KEY: str = "dev_secret_key_change_in_production_1234567890"
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 Hours
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
 
-    # CORS Frontend Origins
-    CORS_ORIGINS: list[str] = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ]
+    COOKIE_NAME: str = "access_token"
+    COOKIE_SECURE: bool = False
+    COOKIE_SAMESITE: str = "lax"
+    COOKIE_HTTPONLY: bool = True
+    COOKIE_DOMAIN: str | None = None
 
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        extra="ignore"
-    )
+    ALLOWED_ORIGINS: str | list[str] = "http://localhost:3000,http://127.0.0.1:3000"
+    MEDIA_DIR: str = "media"
+
+    @field_validator("ALLOWED_ORIGINS", mode="before")
+    @classmethod
+    def assemble_cors_origins(cls, v: str | list[str]) -> list[str]:
+        if isinstance(v, str):
+            if not v.strip():
+                return ["http://localhost:3000"]
+            return [i.strip() for i in v.split(",") if i.strip()]
+        elif isinstance(v, list):
+            return v
+        return ["http://localhost:3000"]
+
+    @property
+    def is_production(self) -> bool:
+        return self.ENV.lower() == "production"
 
 
-@lru_cache()
-def get_settings() -> Settings:
-    """Cached settings singleton instance."""
-    return Settings()
+settings = Settings()

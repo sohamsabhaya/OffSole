@@ -45,7 +45,8 @@ export const CartProvider = ({ children }) => {
       console.error('Error adding to cart:', error);
       return {
         success: false,
-        message: error.response?.data?.error || error.response?.data?.detail || 'Failed to add to cart',
+        message:
+          error.response?.data?.error || error.response?.data?.detail || 'Failed to add to cart',
       };
     }
   };
@@ -108,13 +109,17 @@ export const CartProvider = ({ children }) => {
       console.error('Error processing order:', error);
       return {
         success: false,
-        message: error.response?.data?.error || error.response?.data?.detail || 'Order processing failed',
+        message:
+          error.response?.data?.error || error.response?.data?.detail || 'Order processing failed',
       };
     }
   };
 
   const calculateSubtotal = () => {
-    return cartItems.reduce((total, item) => total + (item.total_price || item.product_price * item.quantity), 0);
+    return cartItems.reduce(
+      (total, item) => total + (item.total_price || item.product_price * item.quantity),
+      0
+    );
   };
 
   const calculateShipping = () => {

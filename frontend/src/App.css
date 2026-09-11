@@ -12,7 +12,7 @@ main {
 /* Navbar styles */
 .navbar {
   z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1.5rem 0;
 }
 
@@ -63,12 +63,14 @@ main {
 
 /* Product card styles */
 .product-card {
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .product-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Footer styles */
@@ -233,11 +235,11 @@ main {
 }
 
 /* Enhanced Checkbox Styles */
-.form-check-input[type="checkbox"] {
+.form-check-input[type='checkbox'] {
   border-radius: 4px;
 }
 
-.form-check-input[type="checkbox"]:checked {
+.form-check-input[type='checkbox']:checked {
   background-color: #0d6efd;
   border-color: #0d6efd;
 }
@@ -254,7 +256,7 @@ main {
   position: relative;
 }
 
-.gender-option input[type="radio"] {
+.gender-option input[type='radio'] {
   display: none;
 }
 
@@ -271,7 +273,7 @@ main {
   color: #495057;
 }
 
-.gender-option input[type="radio"]:checked + label {
+.gender-option input[type='radio']:checked + label {
   border-color: #0d6efd;
   background-color: #e7f1ff;
   color: #0d6efd;
@@ -402,12 +404,12 @@ textarea.form-control {
 .card {
   border-radius: 12px;
   border: none;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
 .card:hover {
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
@@ -468,49 +470,49 @@ textarea.form-control {
     font-size: 1.8rem;
     margin-right: 1rem;
   }
-  
+
   .nav-link {
     padding: 1rem 1.25rem !important;
     margin: 0.5rem 0;
     text-align: center;
     font-size: 1rem;
   }
-  
+
   .navbar-nav {
     margin-top: 1.5rem;
   }
-  
+
   .nav-link.active::after {
     width: 60%;
   }
-  
+
   .display-4 {
     font-size: 2rem;
   }
-  
+
   .display-5 {
     font-size: 1.5rem;
   }
-  
+
   .gender-selection {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .form-control,
   .form-select {
     font-size: 16px; /* Prevents zoom on iOS */
   }
-  
+
   .social-links-horizontal {
     gap: 6px;
   }
-  
+
   .social-link-horizontal {
     padding: 6px 10px;
     font-size: 0.85rem;
   }
-  
+
   .social-link-horizontal i {
     font-size: 1rem;
     width: 18px;
@@ -534,6 +536,6 @@ textarea.form-control {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
-} 
+}
 
-/* Carousel styles moved to index.css to avoid duplication */ 
+/* Carousel styles moved to index.css to avoid duplication */

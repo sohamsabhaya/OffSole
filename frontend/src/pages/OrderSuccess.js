@@ -14,12 +14,12 @@ const OrderSuccess = () => {
               <div className="mb-4">
                 <i className="fas fa-check-circle text-success" style={{ fontSize: '4rem' }}></i>
               </div>
-              
+
               <h1 className="card-title mb-3">Order Placed Successfully!</h1>
               <p className="lead text-muted mb-4">
                 Thank you for your purchase. Your order has been confirmed and is being processed.
               </p>
-              
+
               <div className="row mb-4">
                 <div className="col-md-6">
                   <div className="card">
@@ -28,7 +28,9 @@ const OrderSuccess = () => {
                         <i className="fas fa-receipt text-primary me-2"></i>
                         Order Number
                       </h6>
-                      <p className="card-text mb-1 fw-bold">{orderNumber || 'ORD2026091109301234'}</p>
+                      <p className="card-text mb-1 fw-bold">
+                        {orderNumber || 'ORD2026091109301234'}
+                      </p>
                       {orderId && <small className="text-muted">Order Ref ID: #{orderId}</small>}
                     </div>
                   </div>
@@ -45,7 +47,7 @@ const OrderSuccess = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="alert alert-info" role="alert">
                 <h6 className="alert-heading">
                   <i className="fas fa-info-circle me-2"></i>
@@ -58,7 +60,7 @@ const OrderSuccess = () => {
                   <li>✓ Expected delivery: 3-5 business days</li>
                 </ul>
               </div>
-              
+
               <div className="row mt-4">
                 <div className="col-md-4 mb-3">
                   <Link to="/orders" className="btn btn-primary w-100">
@@ -81,7 +83,7 @@ const OrderSuccess = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Additional Information */}
           <div className="row mt-4">
             <div className="col-md-4">
@@ -118,4 +120,4 @@ const OrderSuccess = () => {
   );
 };
 
-export default OrderSuccess; 
+export default OrderSuccess;

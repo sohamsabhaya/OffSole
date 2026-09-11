@@ -1,190 +1,100 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
-from typing import Optional
-from app.database import get_database
+
 from app.core.deps import get_current_user, get_current_user_optional
+from app.database import get_database
 from app.schemas.cart import (
     AddToCartRequest,
-    UpdateCartItemRequest,
-    CartResponse,
     CartCountResponse,
+    CartResponse,
+    UpdateCartItemRequest,
 )
-from app.schemas.orders import ProcessOrderRequest, OrderSuccessResponse
-from app.crud.product import get_product_by_id
-from app.crud.cart import (
-    get_cart_items,
-    get_cart_count,
-    add_item_to_cart,
-    update_item_quantity,
-    remove_item_from_cart,
-    clear_user_cart,
-)
-from app.crud.order import create_order_from_cart, get_user_orders
+from app.schemas.orders import OrderSuccessResponse, ProcessOrderRequest
+from app.services.cart_service import CartService
+from app.services.order_service import OrderService
 
-router = APIRouter(prefix="/api/cart", tags=["Cart & Checkout"])
+router = APIRouter(prefix="/cart", tags=["Cart & Checkout"])
+
+
+def get_cart_service(db: AsyncIOMotorDatabase = Depends(get_database)) -> CartService:
+    return CartService(db)
+
+
+def get_order_service(db: AsyncIOMotorDatabase = Depends(get_database)) -> OrderService:
+    return OrderService(db)
 
 
 @router.get("/orders/")
 async def get_my_orders(
     current_user: dict = Depends(get_current_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    order_service: OrderService = Depends(get_order_service),
 ):
-    """
-    Retrieves all past orders placed by the currently logged-in user.
-    """
     user_id = str(current_user.get("_id") or current_user.get("id"))
-    username = current_user.get("username")
-    orders = await get_user_orders(db, user_id=user_id, username=username)
-    return {
-        "success": True,
-        "count": len(orders),
-        "orders": orders
-    }
-
+    orders = await order_service.get_user_orders(user_id)
+    return {"success": True, "count": len(orders), "orders": orders}
 
 
 @router.get("/count/", response_model=CartCountResponse)
 async def cart_badge_count(
-    current_user: Optional[dict] = Depends(get_current_user_optional),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict | None = Depends(get_current_user_optional),
+    cart_service: CartService = Depends(get_cart_service),
 ):
-    """
-    Returns total sneaker count for the Navbar badge.
-    Guest visitors get count: 0 without receiving a 401 error.
-    """
-    if not current_user:
-        return CartCountResponse(count=0)
-        
-    user_id = str(current_user.get("_id") or current_user.get("id"))
-    count = await get_cart_count(db, user_id)
+    user_id = str(current_user["_id"]) if current_user else None
+    count = await cart_service.get_cart_count(user_id)
     return CartCountResponse(count=count)
 
 
-@router.get("/get/", response_model=CartResponse)
-async def get_user_cart(
+@router.get("/", response_model=CartResponse)
+async def view_cart(
     current_user: dict = Depends(get_current_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    cart_service: CartService = Depends(get_cart_service),
 ):
-    """
-    Retrieves all items inside the logged-in user's cart.
-    """
-    user_id = str(current_user.get("_id") or current_user.get("id"))
-    items = await get_cart_items(db, user_id)
-    return CartResponse(success=True, items=items)
+    user_id = str(current_user["_id"])
+    return await cart_service.get_cart(user_id)
 
 
-@router.post("/add/", response_model=CartResponse)
-async def add_to_cart(
-    payload: AddToCartRequest,
+@router.post("/items/", response_model=CartResponse)
+async def add_item_to_cart(
+    item_in: AddToCartRequest,
     current_user: dict = Depends(get_current_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    cart_service: CartService = Depends(get_cart_service),
 ):
-    """
-    Adds a sneaker with specified UK size and quantity to the user's cart.
-    """
-    # Verify product exists in catalog
-    product = await get_product_by_id(db, payload.product_id)
-    if not product:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Product with ID '{payload.product_id}' not found."
-        )
-
-    # Validate size availability
-    available_sizes = product.get("available_sizes", {})
-    if not available_sizes.get(payload.size, False):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Size {payload.size} is currently out of stock for {product.get('name')}."
-        )
-
-    user_id = str(current_user.get("_id") or current_user.get("id"))
-    items = await add_item_to_cart(
-        db=db,
-        user_id=user_id,
-        product=product,
-        size=payload.size,
-        quantity=payload.quantity
+    user_id = str(current_user["_id"])
+    return await cart_service.add_item(
+        user_id=user_id, product_id=item_in.product_id, size=item_in.size, quantity=item_in.quantity
     )
-    return CartResponse(success=True, items=items)
 
 
-@router.put("/update/{item_id}/", response_model=CartResponse)
-async def update_cart_quantity(
+@router.put("/items/{item_id}/", response_model=CartResponse)
+async def update_item_qty(
     item_id: str,
-    payload: UpdateCartItemRequest,
+    update_in: UpdateCartItemRequest,
     current_user: dict = Depends(get_current_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    cart_service: CartService = Depends(get_cart_service),
 ):
-    """
-    Modifies item quantity in the shopping cart.
-    """
-    user_id = str(current_user.get("_id") or current_user.get("id"))
-    items = await update_item_quantity(
-        db=db,
-        user_id=user_id,
-        item_id=item_id,
-        quantity=payload.quantity
-    )
-    if items is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Cart item with ID '{item_id}' not found."
-        )
-    return CartResponse(success=True, items=items)
+    user_id = str(current_user["_id"])
+    return await cart_service.update_quantity(user_id, item_id, update_in.quantity)
 
 
-@router.delete("/remove/{item_id}/", response_model=CartResponse)
-async def remove_from_cart(
+@router.delete("/items/{item_id}/", response_model=CartResponse)
+async def delete_item_from_cart(
     item_id: str,
     current_user: dict = Depends(get_current_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    cart_service: CartService = Depends(get_cart_service),
 ):
-    """
-    Removes a specific item from the cart.
-    """
-    user_id = str(current_user.get("_id") or current_user.get("id"))
-    items = await remove_item_from_cart(db, user_id, item_id)
-    return CartResponse(success=True, items=items)
+    user_id = str(current_user["_id"])
+    return await cart_service.remove_item(user_id, item_id)
 
 
-@router.post("/clear/", response_model=CartResponse)
-async def clear_cart(
+@router.post("/checkout/", response_model=OrderSuccessResponse)
+async def checkout_order(
+    order_in: ProcessOrderRequest,
     current_user: dict = Depends(get_current_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    order_service: OrderService = Depends(get_order_service),
 ):
-    """
-    Empties all items from the user's cart.
-    """
-    user_id = str(current_user.get("_id") or current_user.get("id"))
-    await clear_user_cart(db, user_id)
-    return CartResponse(success=True, items=[])
-
-
-@router.post("/process-order/", response_model=OrderSuccessResponse)
-async def process_checkout_order(
-    payload: ProcessOrderRequest,
-    current_user: dict = Depends(get_current_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
-):
-    """
-    Processes checkout: creates order record, records shipping info, and empties cart.
-    """
-    try:
-        order = await create_order_from_cart(
-            db=db,
-            user=current_user,
-            order_in=payload
-        )
-        return OrderSuccessResponse(
-            success=True,
-            order_id=order["_id"],
-            order_number=order["order_number"],
-            message="Your order has been placed successfully!",
-            total_amount=order["total_amount"]
-        )
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+    user_id = str(current_user["_id"])
+    email = current_user.get("email", "")
+    username = current_user.get("username", "")
+    return await order_service.process_checkout(
+        user_id=user_id, user_email=email, username=username, shipping_data=order_in.model_dump()
+    )

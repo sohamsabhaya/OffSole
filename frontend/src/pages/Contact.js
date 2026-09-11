@@ -6,7 +6,7 @@ const Contact = () => {
     email: '',
     gender: '',
     subject: '',
-    message: ''
+    message: '',
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -14,7 +14,7 @@ const Contact = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -46,7 +46,7 @@ const Contact = () => {
           <div className="card">
             <div className="card-body">
               <h3 className="card-title mb-4">Send us a Message</h3>
-              
+
               {success && (
                 <div className="alert alert-success" role="alert">
                   <i className="fas fa-check-circle me-2"></i>
@@ -57,7 +57,9 @@ const Contact = () => {
               <form onSubmit={handleSubmit}>
                 <div className="row">
                   <div className="col-md-6 mb-3">
-                    <label htmlFor="name" className="form-label">Full Name *</label>
+                    <label htmlFor="name" className="form-label">
+                      Full Name *
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -70,7 +72,9 @@ const Contact = () => {
                     />
                   </div>
                   <div className="col-md-6 mb-3">
-                    <label htmlFor="email" className="form-label">Email Address *</label>
+                    <label htmlFor="email" className="form-label">
+                      Email Address *
+                    </label>
                     <input
                       type="email"
                       className="form-control"
@@ -124,7 +128,9 @@ const Contact = () => {
                 </div>
 
                 <div className="mb-3">
-                  <label htmlFor="subject" className="form-label">Subject *</label>
+                  <label htmlFor="subject" className="form-label">
+                    Subject *
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -138,7 +144,9 @@ const Contact = () => {
                 </div>
 
                 <div className="mb-3">
-                  <label htmlFor="message" className="form-label">Message *</label>
+                  <label htmlFor="message" className="form-label">
+                    Message *
+                  </label>
                   <textarea
                     className="form-control"
                     id="message"
@@ -151,11 +159,7 @@ const Contact = () => {
                   ></textarea>
                 </div>
 
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={loading}
-                >
+                <button type="submit" className="btn btn-primary" disabled={loading}>
                   {loading ? (
                     <>
                       <span className="spinner-border spinner-border-sm me-2" role="status"></span>
@@ -183,49 +187,103 @@ const Contact = () => {
           <div className="accordion" id="contactFAQ">
             <div className="accordion-item">
               <h2 className="accordion-header" id="headingOne">
-                <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <button
+                  className="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseOne"
+                  aria-expanded="true"
+                  aria-controls="collapseOne"
+                >
                   How can I track my order?
                 </button>
               </h2>
-              <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#contactFAQ">
+              <div
+                id="collapseOne"
+                className="accordion-collapse collapse show"
+                aria-labelledby="headingOne"
+                data-bs-parent="#contactFAQ"
+              >
                 <div className="accordion-body">
-                  Once your order ships, you'll receive a confirmation email with tracking information. You can also track your order by logging into your account and visiting the "My Orders" section.
+                  Once your order ships, you'll receive a confirmation email with tracking
+                  information. You can also track your order by logging into your account and
+                  visiting the "My Orders" section.
                 </div>
               </div>
             </div>
             <div className="accordion-item">
               <h2 className="accordion-header" id="headingTwo">
-                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseTwo"
+                  aria-expanded="false"
+                  aria-controls="collapseTwo"
+                >
                   What is your return policy?
                 </button>
               </h2>
-              <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#contactFAQ">
+              <div
+                id="collapseTwo"
+                className="accordion-collapse collapse"
+                aria-labelledby="headingTwo"
+                data-bs-parent="#contactFAQ"
+              >
                 <div className="accordion-body">
-                  We offer a 30-day return policy for all unused items in their original packaging. Returns are free and we provide a full refund or exchange.
+                  We offer a 30-day return policy for all unused items in their original packaging.
+                  Returns are free and we provide a full refund or exchange.
                 </div>
               </div>
             </div>
             <div className="accordion-item">
               <h2 className="accordion-header" id="headingThree">
-                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseThree"
+                  aria-expanded="false"
+                  aria-controls="collapseThree"
+                >
                   Do you offer international shipping?
                 </button>
               </h2>
-              <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#contactFAQ">
+              <div
+                id="collapseThree"
+                className="accordion-collapse collapse"
+                aria-labelledby="headingThree"
+                data-bs-parent="#contactFAQ"
+              >
                 <div className="accordion-body">
-                  Currently, we only ship within India. We're working on expanding our shipping options to include international destinations.
+                  Currently, we only ship within India. We're working on expanding our shipping
+                  options to include international destinations.
                 </div>
               </div>
             </div>
             <div className="accordion-item">
               <h2 className="accordion-header" id="headingFour">
-                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseFour"
+                  aria-expanded="false"
+                  aria-controls="collapseFour"
+                >
                   How do I know if a sneaker is authentic?
                 </button>
               </h2>
-              <div id="collapseFour" className="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#contactFAQ">
+              <div
+                id="collapseFour"
+                className="accordion-collapse collapse"
+                aria-labelledby="headingFour"
+                data-bs-parent="#contactFAQ"
+              >
                 <div className="accordion-body">
-                  All our sneakers are sourced directly from authorized dealers and come with authenticity guarantees. We provide detailed product information and high-quality images to help you verify the authenticity.
+                  All our sneakers are sourced directly from authorized dealers and come with
+                  authenticity guarantees. We provide detailed product information and high-quality
+                  images to help you verify the authenticity.
                 </div>
               </div>
             </div>
@@ -236,4 +294,4 @@ const Contact = () => {
   );
 };
 
-export default Contact; 
+export default Contact;

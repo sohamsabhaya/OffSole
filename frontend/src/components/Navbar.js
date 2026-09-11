@@ -17,13 +17,17 @@ const Navbar = () => {
   };
 
   const handleDeleteAccount = async () => {
-    if (window.confirm("Are you sure you want to permanently delete your OffSole account? This action cannot be undone.")) {
+    if (
+      window.confirm(
+        'Are you sure you want to permanently delete your OffSole account? This action cannot be undone.'
+      )
+    ) {
       const res = await deleteAccount();
       if (res.success) {
-        alert("Your account has been successfully deleted.");
+        alert('Your account has been successfully deleted.');
         navigate('/');
       } else {
-        alert(res.message || "Failed to delete account.");
+        alert(res.message || 'Failed to delete account.');
       }
     }
   };
@@ -33,50 +37,57 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg mb-0" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+    <nav
+      className="navbar navbar-expand-lg mb-0"
+      style={{ backgroundColor: '#000000', color: '#ffffff' }}
+    >
       <div className="container">
-        <Link className="navbar-brand fw-bold fs-4" to="/" style={{ color: '#ffffff', letterSpacing: '1px' }}>
+        <Link
+          className="navbar-brand fw-bold fs-4"
+          to="/"
+          style={{ color: '#ffffff', letterSpacing: '1px' }}
+        >
           OffSole
         </Link>
-        
-        <button 
-          className="navbar-toggler" 
-          type="button" 
-          data-bs-toggle="collapse" 
+
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
           data-bs-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup" 
-          aria-expanded="false" 
-          aria-label="Toggle navigation" 
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
           style={{ borderColor: '#ffffff' }}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        
+
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav ms-auto align-items-lg-center">
-            <Link 
-              className={`nav-link ${isActive('/') ? 'active' : ''}`} 
+            <Link
+              className={`nav-link ${isActive('/') ? 'active' : ''}`}
               to="/"
               style={{ color: '#ffffff' }}
             >
               Home
             </Link>
-            <Link 
-              className={`nav-link ${isActive('/products') ? 'active' : ''}`} 
+            <Link
+              className={`nav-link ${isActive('/products') ? 'active' : ''}`}
               to="/products"
               style={{ color: '#ffffff' }}
             >
               Products
             </Link>
-            <Link 
-              className={`nav-link ${isActive('/about') ? 'active' : ''}`} 
+            <Link
+              className={`nav-link ${isActive('/about') ? 'active' : ''}`}
               to="/about"
               style={{ color: '#ffffff' }}
             >
               About
             </Link>
-            <Link 
-              className={`nav-link ${isActive('/contact') ? 'active' : ''}`} 
+            <Link
+              className={`nav-link ${isActive('/contact') ? 'active' : ''}`}
               to="/contact"
               style={{ color: '#ffffff' }}
             >
@@ -84,42 +95,38 @@ const Navbar = () => {
             </Link>
 
             {isAuthenticated && isAdmin && (
-              <Link 
-                className={`nav-link fw-semibold ${isActive('/admin') ? 'active' : ''}`} 
+              <Link
+                className={`nav-link fw-semibold ${isActive('/admin') ? 'active' : ''}`}
                 to="/admin"
                 style={{ color: '#f59e0b' }}
               >
                 <i className="fas fa-tachometer-alt me-1"></i> Admin Dashboard
               </Link>
             )}
-            
+
             {isAuthenticated ? (
               <>
-                <Link 
-                  className={`nav-link ${isActive('/orders') ? 'active' : ''}`} 
+                <Link
+                  className={`nav-link ${isActive('/orders') ? 'active' : ''}`}
                   to="/orders"
                   style={{ color: '#ffffff' }}
                 >
                   <i className="fas fa-box me-1"></i> My Orders
                 </Link>
-                <Link 
-                  className="nav-link" 
-                  to="/cart"
-                  style={{ color: '#ffffff' }}
-                >
+                <Link className="nav-link" to="/cart" style={{ color: '#ffffff' }}>
                   <i className="fas fa-shopping-cart" style={{ color: '#ffffff' }}></i>
                   <span className="badge bg-danger ms-1">{cartCount}</span>
                 </Link>
-                <button 
-                  className="nav-link btn btn-link" 
+                <button
+                  className="nav-link btn btn-link"
                   onClick={handleLogout}
                   style={{ background: 'none', border: 'none', color: '#ffffff' }}
                 >
                   Logout ({user})
                 </button>
                 {!isAdmin && (
-                  <button 
-                    className="nav-link btn btn-link text-danger-emphasis small" 
+                  <button
+                    className="nav-link btn btn-link text-danger-emphasis small"
                     onClick={handleDeleteAccount}
                     style={{ background: 'none', border: 'none', color: '#f87171' }}
                     title="Permanently delete your account"
@@ -130,15 +137,15 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link 
-                  className={`nav-link ${isActive('/login') ? 'active' : ''}`} 
+                <Link
+                  className={`nav-link ${isActive('/login') ? 'active' : ''}`}
                   to="/login"
                   style={{ color: '#ffffff' }}
                 >
                   Login
                 </Link>
-                <Link 
-                  className={`nav-link ${isActive('/signup') ? 'active' : ''}`} 
+                <Link
+                  className={`nav-link ${isActive('/signup') ? 'active' : ''}`}
                   to="/signup"
                   style={{ color: '#ffffff' }}
                 >
@@ -153,4 +160,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

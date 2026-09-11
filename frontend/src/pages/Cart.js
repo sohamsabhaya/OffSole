@@ -64,7 +64,9 @@ const Cart = () => {
         <div className="card shadow-sm border-0 text-center p-5 rounded-4 max-w-md mx-auto">
           <i className="fas fa-user-lock fa-3x text-primary mb-3"></i>
           <h3 className="fw-bold">Please Log In</h3>
-          <p className="text-muted">You need to be logged in to view and manage your shopping cart.</p>
+          <p className="text-muted">
+            You need to be logged in to view and manage your shopping cart.
+          </p>
           <div className="d-flex gap-2 justify-content-center mt-3">
             <Link to="/login" className="btn btn-primary px-4 py-2 fw-semibold">
               Log In
@@ -97,7 +99,9 @@ const Cart = () => {
 
   return (
     <div className="container py-5">
-      <h1 className="fw-bold mb-4">Shopping Cart ({cartItems.reduce((acc, i) => acc + i.quantity, 0)} Items)</h1>
+      <h1 className="fw-bold mb-4">
+        Shopping Cart ({cartItems.reduce((acc, i) => acc + i.quantity, 0)} Items)
+      </h1>
 
       {error && <div className="alert alert-warning py-2 mb-4">{error}</div>}
 
@@ -109,12 +113,18 @@ const Cart = () => {
               <table className="table align-middle mb-0">
                 <thead className="table-light">
                   <tr>
-                    <th scope="col" className="ps-4">Product</th>
+                    <th scope="col" className="ps-4">
+                      Product
+                    </th>
                     <th scope="col">Size</th>
                     <th scope="col">Price</th>
-                    <th scope="col" style={{ width: '140px' }}>Quantity</th>
+                    <th scope="col" style={{ width: '140px' }}>
+                      Quantity
+                    </th>
                     <th scope="col">Total</th>
-                    <th scope="col" className="text-end pe-4">Action</th>
+                    <th scope="col" className="text-end pe-4">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -154,7 +164,9 @@ const Cart = () => {
                         </div>
                       </td>
                       <td>
-                        <span className="badge bg-light text-dark border px-2 py-1">{item.size}</span>
+                        <span className="badge bg-light text-dark border px-2 py-1">
+                          {item.size}
+                        </span>
                       </td>
                       <td className="fw-semibold">{formatCurrency(item.product_price)}</td>
                       <td>

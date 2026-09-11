@@ -1,7 +1,8 @@
 import React from 'react';
 
 const Loader = ({ message = 'Loading...', size = 'md' }) => {
-  const spinnerSize = size === 'sm' ? 'spinner-border-sm' : size === 'lg' ? 'spinner-border-lg' : '';
+  const spinnerSize =
+    size === 'sm' ? 'spinner-border-sm' : size === 'lg' ? 'spinner-border-lg' : '';
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center py-5">

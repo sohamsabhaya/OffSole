@@ -1,66 +1,87 @@
+import logging
 import os
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+
+from fastapi import APIRouter, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.config import get_settings
-from app.database import connect_to_mongo, close_mongo_connection
-from app.routers import auth_router, products_router, cart_router, admin_router
+from app.config import settings
+from app.core.exceptions import AppException
+from app.database import close_mongo_connection, connect_to_mongo
+from app.routers.admin import router as admin_router
+from app.routers.auth import router as auth_router
+from app.routers.cart import router as cart_router
+from app.routers.products import router as products_router
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("offsole")
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    Application Lifespan Context Manager.
-    Handles startup DB connection and shutdown cleanup.
-    """
-    settings = get_settings()
-    print(f"Starting {settings.APP_NAME} v{settings.APP_VERSION}...")
-
+    logger.info("Initializing OffSole Application...")
     await connect_to_mongo()
-
-    yield  # Server serves requests here
-
+    yield
+    logger.info("Shutting down OffSole Application...")
     await close_mongo_connection()
 
 
-
-# Initialize FastAPI App
-settings = get_settings()
 app = FastAPI(
-    title=settings.APP_NAME,
-    version=settings.APP_VERSION,
-    description="High-performance async API for OffSole Sneaker Store built with FastAPI and MongoDB Atlas.",
-    lifespan=lifespan
+    title=settings.PROJECT_NAME,
+    version=settings.VERSION,
+    description="Full-stack Sneaker E-Commerce API with FastAPI and MongoDB",
+    lifespan=lifespan,
+    docs_url="/docs",
+    redoc_url="/redoc",
 )
 
-# Configure CORS for React Axios withCredentials support
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=settings.ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Ensure media directory exists and mount static file serving
-os.makedirs("media", exist_ok=True)
-app.mount("/media", StaticFiles(directory="media"), name="media")
-
-# Include Modular API Routers
-app.include_router(auth_router)
-app.include_router(products_router)
-app.include_router(cart_router)
-app.include_router(admin_router)
+os.makedirs(settings.MEDIA_DIR, exist_ok=True)
+app.mount(f"/{settings.MEDIA_DIR}", StaticFiles(directory=settings.MEDIA_DIR), name="media")
 
 
-@app.get("/", tags=["Health"])
-async def root():
-    """Health check root endpoint."""
+@app.exception_handler(AppException)
+async def app_exception_handler(request: Request, exc: AppException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "success": False,
+            "error": {"code": exc.error_code, "message": exc.message, "details": exc.details},
+        },
+    )
+
+
+# Mount versioned API router under /api/v1
+api_v1_router = APIRouter(prefix=settings.API_V1_PREFIX)
+api_v1_router.include_router(auth_router)
+api_v1_router.include_router(products_router)
+api_v1_router.include_router(cart_router)
+api_v1_router.include_router(admin_router)
+app.include_router(api_v1_router)
+
+# Mount unversioned /api aliases for backwards compatibility with existing frontend
+api_legacy_router = APIRouter(prefix="/api")
+api_legacy_router.include_router(auth_router)
+api_legacy_router.include_router(products_router)
+api_legacy_router.include_router(cart_router)
+api_legacy_router.include_router(admin_router)
+app.include_router(api_legacy_router)
+
+
+@app.get("/health", tags=["System"])
+async def health_check():
     return {
         "status": "healthy",
-        "app": settings.APP_NAME,
-        "version": settings.APP_VERSION,
-        "docs_url": "/docs"
+        "app": settings.PROJECT_NAME,
+        "version": settings.VERSION,
+        "environment": settings.ENV,
     }

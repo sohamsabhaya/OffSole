@@ -42,12 +42,24 @@ const Orders = () => {
   const getStatusBadge = (status) => {
     const s = (status || '').toLowerCase();
     if (s === 'delivered') {
-      return <span className="badge bg-success-subtle text-success border border-success px-3 py-2">Delivered</span>;
+      return (
+        <span className="badge bg-success-subtle text-success border border-success px-3 py-2">
+          Delivered
+        </span>
+      );
     }
     if (s === 'shipped') {
-      return <span className="badge bg-primary-subtle text-primary border border-primary px-3 py-2">Shipped</span>;
+      return (
+        <span className="badge bg-primary-subtle text-primary border border-primary px-3 py-2">
+          Shipped
+        </span>
+      );
     }
-    return <span className="badge bg-warning-subtle text-warning-emphasis border border-warning px-3 py-2">Processing</span>;
+    return (
+      <span className="badge bg-warning-subtle text-warning-emphasis border border-warning px-3 py-2">
+        Processing
+      </span>
+    );
   };
 
   if (authLoading || loading) {
@@ -83,7 +95,9 @@ const Orders = () => {
               <i className="fas fa-box-open"></i>
             </div>
             <h4 className="fw-bold">No Orders Found</h4>
-            <p className="text-muted mb-4">You have not placed any sneaker orders with OffSole yet.</p>
+            <p className="text-muted mb-4">
+              You have not placed any sneaker orders with OffSole yet.
+            </p>
             <Link to="/products" className="btn btn-primary px-4 py-2 fw-semibold">
               Explore Sneaker Catalog
             </Link>
@@ -109,25 +123,33 @@ const Orders = () => {
                   {/* Order Header */}
                   <div className="card-header bg-dark text-white p-3 p-md-4 d-flex flex-wrap justify-content-between align-items-center gap-2">
                     <div>
-                      <span className="text-uppercase small text-light opacity-75 d-block">Order Reference</span>
+                      <span className="text-uppercase small text-light opacity-75 d-block">
+                        Order Reference
+                      </span>
                       <span className="fw-bold fs-5 text-white">{order.order_number}</span>
                     </div>
                     <div>
-                      <span className="text-uppercase small text-light opacity-75 d-block">Date Placed</span>
+                      <span className="text-uppercase small text-light opacity-75 d-block">
+                        Date Placed
+                      </span>
                       <span className="text-white small">{formattedDate}</span>
                     </div>
                     <div>
-                      <span className="text-uppercase small text-light opacity-75 d-block">Total Amount</span>
-                      <span className="fw-bold fs-5 text-success">{formatCurrency(order.total_amount)}</span>
+                      <span className="text-uppercase small text-light opacity-75 d-block">
+                        Total Amount
+                      </span>
+                      <span className="fw-bold fs-5 text-success">
+                        {formatCurrency(order.total_amount)}
+                      </span>
                     </div>
-                    <div>
-                      {getStatusBadge(order.order_status)}
-                    </div>
+                    <div>{getStatusBadge(order.order_status)}</div>
                   </div>
 
                   {/* Order Body / Items */}
                   <div className="card-body p-4">
-                    <h6 className="fw-bold text-muted text-uppercase small mb-3">Ordered Items ({items.length})</h6>
+                    <h6 className="fw-bold text-muted text-uppercase small mb-3">
+                      Ordered Items ({items.length})
+                    </h6>
                     <div className="table-responsive">
                       <table className="table table-borderless align-middle mb-0">
                         <tbody>
@@ -154,7 +176,9 @@ const Orders = () => {
                                 </td>
                                 <td>
                                   <div className="fw-bold">{item.name}</div>
-                                  <div className="text-muted small">Brand: {item.brand || 'OffSole'}</div>
+                                  <div className="text-muted small">
+                                    Brand: {item.brand || 'OffSole'}
+                                  </div>
                                 </td>
                                 <td>
                                   <span className="badge bg-secondary-subtle text-dark border font-monospace">
@@ -177,18 +201,29 @@ const Orders = () => {
                     {/* Shipping and Payment info */}
                     <div className="row mt-3 pt-3 border-top g-3 bg-light rounded-3 p-3">
                       <div className="col-md-8">
-                        <small className="text-muted fw-bold text-uppercase d-block mb-1">Shipping Address</small>
+                        <small className="text-muted fw-bold text-uppercase d-block mb-1">
+                          Shipping Address
+                        </small>
                         <p className="mb-0 text-dark small">
-                          <strong>{order.username}</strong><br />
-                          {order.address}, Pincode: {order.pincode}<br />
+                          <strong>{order.username}</strong>
+                          <br />
+                          {order.address}, Pincode: {order.pincode}
+                          <br />
                           Phone: {order.phone_number}
                         </p>
                       </div>
                       <div className="col-md-4 text-md-end">
-                        <small className="text-muted fw-bold text-uppercase d-block mb-1">Payment Method</small>
-                        <span className="badge bg-dark text-uppercase">{order.payment_method || 'Card'}</span>
+                        <small className="text-muted fw-bold text-uppercase d-block mb-1">
+                          Payment Method
+                        </small>
+                        <span className="badge bg-dark text-uppercase">
+                          {order.payment_method || 'Card'}
+                        </span>
                         <div className="small text-muted mt-1">
-                          Payment: <strong className="text-uppercase">{order.payment_status || 'Paid'}</strong>
+                          Payment:{' '}
+                          <strong className="text-uppercase">
+                            {order.payment_status || 'Paid'}
+                          </strong>
                         </div>
                       </div>
                     </div>

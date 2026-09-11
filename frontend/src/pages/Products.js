@@ -94,7 +94,8 @@ const Products = () => {
         </div>
         <div className="mt-3 mt-md-0">
           <span className="badge bg-primary px-3 py-2 fs-6">
-            {filteredProducts.length} {filteredProducts.length === 1 ? 'Sneaker' : 'Sneakers'} Available
+            {filteredProducts.length} {filteredProducts.length === 1 ? 'Sneaker' : 'Sneakers'}{' '}
+            Available
           </span>
         </div>
       </div>

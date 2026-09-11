@@ -139,7 +139,8 @@ const Signup = () => {
                 >
                   {loading ? (
                     <>
-                      <span className="spinner-border spinner-border-sm me-2"></span> Creating Account...
+                      <span className="spinner-border spinner-border-sm me-2"></span> Creating
+                      Account...
                     </>
                   ) : (
                     'Sign Up'

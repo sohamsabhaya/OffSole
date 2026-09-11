@@ -16,18 +16,22 @@ const About = () => {
         <div className="col-lg-6">
           <h2 className="mb-4">Our Mission</h2>
           <p className="lead">
-            At OffSole, we believe everyone deserves access to authentic, high-quality sneakers. 
-            Our mission is to provide sneaker enthusiasts with a reliable platform to discover, 
-            purchase, and collect the latest releases and classic favorites from the world's top brands.
+            At OffSole, we believe everyone deserves access to authentic, high-quality sneakers. Our
+            mission is to provide sneaker enthusiasts with a reliable platform to discover,
+            purchase, and collect the latest releases and classic favorites from the world's top
+            brands.
           </p>
           <p>
-            Founded in 2026, we've built our reputation on authenticity, customer service, and 
-            a passion for sneaker culture. Every product in our collection is sourced directly 
-            from authorized dealers and manufacturers, ensuring you receive only genuine items.
+            Founded in 2026, we've built our reputation on authenticity, customer service, and a
+            passion for sneaker culture. Every product in our collection is sourced directly from
+            authorized dealers and manufacturers, ensuring you receive only genuine items.
           </p>
         </div>
         <div className="col-lg-6">
-          <div className="p-4 bg-light rounded d-flex align-items-center justify-content-center" style={{ height: '300px' }}>
+          <div
+            className="p-4 bg-light rounded d-flex align-items-center justify-content-center"
+            style={{ height: '300px' }}
+          >
             <div className="text-center">
               <i className="fas fa-running fa-4x text-primary mb-3"></i>
               <h5 className="text-muted">Premium Sneaker Collection</h5>
@@ -48,8 +52,8 @@ const About = () => {
               <i className="fas fa-shield-alt fa-3x text-primary mb-3"></i>
               <h5 className="card-title">Authenticity</h5>
               <p className="card-text">
-                Every sneaker in our collection is 100% authentic, sourced directly from 
-                authorized dealers and manufacturers.
+                Every sneaker in our collection is 100% authentic, sourced directly from authorized
+                dealers and manufacturers.
               </p>
             </div>
           </div>
@@ -60,8 +64,8 @@ const About = () => {
               <i className="fas fa-heart fa-3x text-primary mb-3"></i>
               <h5 className="card-title">Customer First</h5>
               <p className="card-text">
-                Your satisfaction is our priority. We provide exceptional service and 
-                support throughout your shopping journey.
+                Your satisfaction is our priority. We provide exceptional service and support
+                throughout your shopping journey.
               </p>
             </div>
           </div>
@@ -72,8 +76,8 @@ const About = () => {
               <i className="fas fa-globe fa-3x text-primary mb-3"></i>
               <h5 className="card-title">Community</h5>
               <p className="card-text">
-                We're passionate about sneaker culture and building a community of 
-                enthusiasts who share our love for kicks.
+                We're passionate about sneaker culture and building a community of enthusiasts who
+                share our love for kicks.
               </p>
             </div>
           </div>
@@ -128,4 +132,4 @@ const About = () => {
   );
 };
 
-export default About; 
+export default About;

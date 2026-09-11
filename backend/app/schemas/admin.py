@@ -1,51 +1,61 @@
+from typing import Any
+
 from pydantic import BaseModel, Field
-from typing import Dict, List, Optional
 
 
 class ProductCreate(BaseModel):
-    """Payload for Admin adding a new sneaker."""
     name: str = Field(..., min_length=2)
     brand: str = Field(..., min_length=2)
     price: float = Field(..., gt=0)
     description: str = Field(...)
-    image: str = Field(...)
-    available_sizes: Dict[str, bool] = {
-        "UK6": True,
-        "UK7": True,
-        "UK8": True,
-        "UK9": True,
-        "UK10": True,
-        "UK11": True
-    }
+    image: str | None = ""
+    images: list[str] = []
+    sizes: list[float] = [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
     gender: str = "Unisex"
-    colour: str = "Standard"
+    color: str = "Multi"
+    category: str = "Lifestyle"
+    in_stock: int = 20
 
 
 class ProductUpdate(BaseModel):
-    """Payload for Admin editing an existing sneaker."""
-    name: Optional[str] = None
-    brand: Optional[str] = None
-    price: Optional[float] = None
-    description: Optional[str] = None
-    image: Optional[str] = None
-    available_sizes: Optional[Dict[str, bool]] = None
-    gender: Optional[str] = None
-    colour: Optional[str] = None
+    name: str | None = None
+    brand: str | None = None
+    price: float | None = None
+    description: str | None = None
+    image: str | None = None
+    images: list[str] | None = None
+    sizes: list[float] | None = None
+    gender: str | None = None
+    color: str | None = None
+    category: str | None = None
+    in_stock: int | None = None
 
 
-class RecentOrder(BaseModel):
-    id: str
-    order_number: str
-    username: str
-    total_amount: float
-    order_status: str
-    created_at: str
+class MonthlySalesItem(BaseModel):
+    month: str
+    revenue: float
+    orders: int
+    units: int
+
+
+class CategorySalesItem(BaseModel):
+    name: str
+    value: float
+
+
+class SalesAnalyticsResponse(BaseModel):
+    monthly_sales: list[MonthlySalesItem]
+    by_brand: list[CategorySalesItem]
+    by_gender: list[CategorySalesItem]
+    by_category: list[CategorySalesItem]
+    by_color: list[CategorySalesItem]
 
 
 class AdminStatsResponse(BaseModel):
-    success: bool = True
-    total_revenue: float
     total_orders: int
-    total_users: int
+    total_revenue: float
+    total_units_sold: int
+    average_order_value: float
     total_products: int
-    recent_orders: List[dict] = []
+    total_users: int
+    recent_orders: list[dict[str, Any]] = []

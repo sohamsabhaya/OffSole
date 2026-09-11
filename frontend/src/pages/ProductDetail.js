@@ -48,11 +48,17 @@ const ProductDetail = () => {
       if (result.success) {
         navigate('/cart');
       } else {
-        setAlertInfo({ type: 'danger', message: result.message || 'Failed to add product to cart.' });
+        setAlertInfo({
+          type: 'danger',
+          message: result.message || 'Failed to add product to cart.',
+        });
       }
     } catch (err) {
       console.error('Error adding to cart:', err);
-      setAlertInfo({ type: 'danger', message: 'Error adding to cart. Please make sure you are logged in.' });
+      setAlertInfo({
+        type: 'danger',
+        message: 'Error adding to cart. Please make sure you are logged in.',
+      });
     } finally {
       setAddingToCart(false);
     }
@@ -89,12 +95,18 @@ const ProductDetail = () => {
       <nav aria-label="breadcrumb" className="mb-4">
         <ol className="breadcrumb">
           <li className="breadcrumb-item">
-            <Link to="/" className="text-decoration-none">Home</Link>
+            <Link to="/" className="text-decoration-none">
+              Home
+            </Link>
           </li>
           <li className="breadcrumb-item">
-            <Link to="/products" className="text-decoration-none">Products</Link>
+            <Link to="/products" className="text-decoration-none">
+              Products
+            </Link>
           </li>
-          <li className="breadcrumb-item active" aria-current="page">{product.name}</li>
+          <li className="breadcrumb-item active" aria-current="page">
+            {product.name}
+          </li>
         </ol>
       </nav>
 
@@ -111,13 +123,20 @@ const ProductDetail = () => {
           <div className="card border-0 shadow-sm rounded-4 overflow-hidden bg-light p-4 text-center">
             {product.image ? (
               <img
-                src={product.image.startsWith('http') ? product.image : `http://localhost:8000${product.image}`}
+                src={
+                  product.image.startsWith('http')
+                    ? product.image
+                    : `http://localhost:8000${product.image}`
+                }
                 alt={product.name}
                 className="img-fluid mx-auto"
                 style={{ maxHeight: '450px', objectFit: 'contain' }}
               />
             ) : (
-              <div className="d-flex align-items-center justify-content-center" style={{ height: '400px' }}>
+              <div
+                className="d-flex align-items-center justify-content-center"
+                style={{ height: '400px' }}
+              >
                 <span className="text-muted">No Image Available</span>
               </div>
             )}
@@ -128,10 +147,14 @@ const ProductDetail = () => {
         <div className="col-lg-6">
           <div className="ps-lg-3">
             <span className="badge bg-dark text-uppercase px-3 py-2 mb-2">{product.brand}</span>
-            <span className="badge bg-secondary ms-2 px-3 py-2 mb-2">{product.gender || 'Unisex'}</span>
+            <span className="badge bg-secondary ms-2 px-3 py-2 mb-2">
+              {product.gender || 'Unisex'}
+            </span>
 
             <h1 className="fw-bold mb-2">{product.name}</h1>
-            <p className="text-muted mb-3">Colorway: <strong>{product.colour || 'Standard'}</strong></p>
+            <p className="text-muted mb-3">
+              Colorway: <strong>{product.colour || 'Standard'}</strong>
+            </p>
 
             <div className="fs-2 fw-bold text-primary mb-4">
               {formatCurrency(product.price)}
@@ -161,8 +184,8 @@ const ProductDetail = () => {
                         isSelected
                           ? 'btn-primary shadow-sm'
                           : isAvailable
-                          ? 'btn-outline-dark'
-                          : 'btn-outline-secondary text-decoration-line-through opacity-50'
+                            ? 'btn-outline-dark'
+                            : 'btn-outline-secondary text-decoration-line-through opacity-50'
                       }`}
                       onClick={() => setSelectedSize(size)}
                     >
@@ -210,7 +233,8 @@ const ProductDetail = () => {
               >
                 {addingToCart ? (
                   <>
-                    <span className="spinner-border spinner-border-sm me-2"></span> Adding to Cart...
+                    <span className="spinner-border spinner-border-sm me-2"></span> Adding to
+                    Cart...
                   </>
                 ) : (
                   <>
@@ -224,7 +248,8 @@ const ProductDetail = () => {
             <div className="card bg-light border-0 rounded-3 p-3">
               <h6 className="fw-bold mb-2">About this pair</h6>
               <p className="text-muted small mb-0" style={{ whiteSpace: 'pre-line' }}>
-                {product.description || 'Premium sneakers crafted for style, comfort, and everyday durability.'}
+                {product.description ||
+                  'Premium sneakers crafted for style, comfort, and everyday durability.'}
               </p>
             </div>
           </div>

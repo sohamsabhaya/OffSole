@@ -1,37 +1,38 @@
 from pydantic import BaseModel, Field
-from typing import List
 
 
 class AddToCartRequest(BaseModel):
-    """Payload sent by React when clicking 'Add to Bag'."""
     product_id: str
-    size: str
-    quantity: int = Field(default=1, ge=1, le=10, description="Quantity between 1 and 10")
+    size: str | float
+    quantity: int = Field(default=1, ge=1, le=10)
 
 
 class UpdateCartItemRequest(BaseModel):
-    """Payload sent when modifying quantity (+ / -) in the Cart page."""
-    quantity: int = Field(..., ge=1, le=10, description="New quantity between 1 and 10")
+    quantity: int = Field(..., ge=0, le=10)
 
 
 class CartItemResponse(BaseModel):
-    """Individual sneaker item inside a user's active bag."""
-    id: str
+    id: str | None = None
+    item_id: str | None = None
     product_id: str
-    product_name: str
-    product_price: float
-    product_image: str
+    name: str | None = None
+    product_name: str | None = None
+    price: float | None = 0.0
+    product_price: float | None = 0.0
+    image: str | None = ""
+    product_image: str | None = ""
+    brand: str | None = ""
     size: str
-    quantity: int
-    total_price: float
+    quantity: int = 1
+    total_price: float | None = 0.0
 
 
 class CartResponse(BaseModel):
-    """Response returned for GET /api/cart/get/"""
     success: bool = True
-    items: List[CartItemResponse] = []
+    items: list[CartItemResponse] = []
+    total_items: int = 0
+    subtotal: float = 0.0
 
 
 class CartCountResponse(BaseModel):
-    """Response returned for GET /api/cart/count/ for the Navbar badge."""
     count: int = 0

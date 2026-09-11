@@ -1,28 +1,29 @@
-from pydantic import BaseModel, Field
-from typing import Dict, List, Optional
+from pydantic import BaseModel
 
 
 class ProductBase(BaseModel):
     """Core sneaker attributes."""
+
     name: str
     brand: str
     price: float
     description: str
     image: str
-    available_sizes: Dict[str, bool] = {
+    available_sizes: dict[str, bool] = {
         "UK6": True,
         "UK7": True,
         "UK8": True,
         "UK9": True,
         "UK10": True,
-        "UK11": True
+        "UK11": True,
     }
-    gender: Optional[str] = "Unisex"
-    colour: Optional[str] = "Multi"
+    gender: str | None = "Unisex"
+    colour: str | None = "Multi"
 
 
 class ProductResponse(ProductBase):
     """Sneaker details including its string identifier for the React UI."""
+
     id: str
 
 
@@ -32,6 +33,7 @@ ProductDetailResponse = ProductResponse
 
 class ProductListResponse(BaseModel):
     """Envelope response for GET /api/products/"""
+
     success: bool = True
-    products: List[ProductResponse]
+    products: list[ProductResponse]
     count: int = 0

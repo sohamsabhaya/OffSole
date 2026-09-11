@@ -40,19 +40,20 @@ export const AuthProvider = ({ children }) => {
         await checkAuthStatus();
         // After checkAuthStatus, isAdmin state is updated — read the fresh status
         const statusData = await authService.checkStatus();
-        const adminFlag = Boolean(statusData.is_admin || statusData.is_staff || statusData.username === 'admin');
+        const adminFlag = Boolean(
+          statusData.is_admin || statusData.is_staff || statusData.username === 'admin'
+        );
         return { success: true, message: data.message, isAdmin: adminFlag };
       }
       return { success: false, message: data.message || 'Login failed' };
     } catch (error) {
       console.error('Login error:', error);
-      return { 
-        success: false, 
-        message: error.response?.data?.detail || error.response?.data?.message || 'Login failed' 
+      return {
+        success: false,
+        message: error.response?.data?.detail || error.response?.data?.message || 'Login failed',
       };
     }
   };
-
 
   const signup = async (userData) => {
     try {
@@ -64,9 +65,9 @@ export const AuthProvider = ({ children }) => {
       return { success: false, message: data.message || 'Signup failed' };
     } catch (error) {
       console.error('Signup error:', error);
-      return { 
-        success: false, 
-        message: error.response?.data?.detail || error.response?.data?.message || 'Signup failed' 
+      return {
+        success: false,
+        message: error.response?.data?.detail || error.response?.data?.message || 'Signup failed',
       };
     }
   };
@@ -94,7 +95,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Error deleting account:', error);
       return {
         success: false,
-        message: error.response?.data?.detail || 'Failed to delete account'
+        message: error.response?.data?.detail || 'Failed to delete account',
       };
     }
   };

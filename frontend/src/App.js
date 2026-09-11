@@ -28,27 +28,30 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
 
             {/* Storefront shell wraps all customer-facing pages */}
-            <Route path="/*" element={
-              <div className="App">
-                <Navbar />
-                <main className="flex-grow-1">
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/product/:id" element={<ProductDetail />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/order-success" element={<OrderSuccess />} />
-                    <Route path="/orders" element={<Orders />} />
-                  </Routes>
-                </main>
-                <Footer />
-              </div>
-            } />
+            <Route
+              path="/*"
+              element={
+                <div className="App">
+                  <Navbar />
+                  <main className="flex-grow-1">
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/products" element={<Products />} />
+                      <Route path="/product/:id" element={<ProductDetail />} />
+                      <Route path="/cart" element={<Cart />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/signup" element={<Signup />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/contact" element={<Contact />} />
+                      <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/order-success" element={<OrderSuccess />} />
+                      <Route path="/orders" element={<Orders />} />
+                    </Routes>
+                  </main>
+                  <Footer />
+                </div>
+              }
+            />
           </Routes>
         </Router>
       </CartProvider>

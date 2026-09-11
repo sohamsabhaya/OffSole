@@ -11,7 +11,11 @@ const ProductCard = ({ product }) => {
       <div className="position-relative bg-light text-center p-3">
         {product.image ? (
           <img
-            src={product.image.startsWith('http') ? product.image : `http://localhost:8000${product.image}`}
+            src={
+              product.image.startsWith('http')
+                ? product.image
+                : `http://localhost:8000${product.image}`
+            }
             className="card-img-top img-fluid"
             alt={product.name}
             style={{ height: '220px', objectFit: 'contain' }}
@@ -21,11 +25,14 @@ const ProductCard = ({ product }) => {
             }}
           />
         ) : (
-          <div className="d-flex align-items-center justify-content-center bg-secondary-subtle" style={{ height: '220px' }}>
+          <div
+            className="d-flex align-items-center justify-content-center bg-secondary-subtle"
+            style={{ height: '220px' }}
+          >
             <span className="text-muted">No Image Available</span>
           </div>
         )}
-        
+
         {product.gender && (
           <span className="badge bg-dark position-absolute top-0 start-0 m-3 px-2 py-1">
             {product.gender}
@@ -40,7 +47,7 @@ const ProductCard = ({ product }) => {
             {product.name}
           </Link>
         </h6>
-        
+
         <p className="card-text text-muted small text-truncate mb-2">
           {product.colour || 'Standard Edition'}
         </p>
@@ -54,7 +61,10 @@ const ProductCard = ({ product }) => {
           </div>
 
           <div className="d-grid gap-2">
-            <Link to={`/product/${product.id}`} className="btn btn-outline-primary btn-sm fw-semibold">
+            <Link
+              to={`/product/${product.id}`}
+              className="btn btn-outline-primary btn-sm fw-semibold"
+            >
               View Details
             </Link>
           </div>

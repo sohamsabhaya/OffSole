@@ -1,45 +1,80 @@
+from datetime import UTC, datetime, timedelta
+from typing import Any
+
 import bcrypt
-from datetime import datetime, timedelta, timezone
-from jose import jwt, JWTError
-from app.config import get_settings
+from fastapi import Response
+from jose import JWTError, jwt
 
-
-def get_password_hash(password: str) -> str:
-    """Hashes a plaintext password securely using bcrypt."""
-    # Convert string to bytes, generate salt and hash
-    pwd_bytes = password.encode('utf-8')
-    salt = bcrypt.gensalt()
-    return bcrypt.hashpw(pwd_bytes, salt).decode('utf-8')
+from app.config import settings
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verifies a plaintext password against the stored bcrypt hash."""
-    return bcrypt.checkpw(
-        plain_password.encode('utf-8'),
-        hashed_password.encode('utf-8')
-    )
+    try:
+        password_bytes = plain_password.encode("utf-8")[:72]
+        if isinstance(hashed_password, str):
+            hashed_bytes = hashed_password.encode("utf-8")
+        else:
+            hashed_bytes = hashed_password
+        return bcrypt.checkpw(password_bytes, hashed_bytes)
+    except Exception:
+        return False
 
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
-    """Creates a signed JWT token containing user payload and expiration time."""
-    settings = get_settings()
-    to_encode = data.copy()
-    
+def get_password_hash(password: str) -> str:
+    password_bytes = password.encode("utf-8")[:72]
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(password_bytes, salt).decode("utf-8")
+
+
+def create_access_token(
+    subject: str | Any, claims: dict[str, Any] | None = None, expires_delta: timedelta | None = None
+) -> str:
     if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
+        expire = datetime.now(UTC) + expires_delta
     else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
-    return encoded_jwt
+        expire = datetime.now(UTC) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+
+    to_encode: dict[str, Any] = {
+        "sub": str(subject),
+        "exp": expire,
+        "iat": datetime.now(UTC),
+    }
+
+    if claims:
+        to_encode.update(claims)
+
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
-def decode_access_token(token: str) -> dict | None:
-    """Decodes and validates a JWT token signature and expiry."""
-    settings = get_settings()
+def decode_access_token(token: str) -> dict[str, Any] | None:
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         return payload
     except JWTError:
         return None
+
+
+def set_auth_cookie(response: Response, token: str) -> None:
+    max_age = settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+    response.set_cookie(
+        key=settings.COOKIE_NAME,
+        value=token,
+        max_age=max_age,
+        expires=max_age,
+        httponly=settings.COOKIE_HTTPONLY,
+        samesite=settings.COOKIE_SAMESITE,
+        secure=settings.COOKIE_SECURE or settings.is_production,
+        domain=settings.COOKIE_DOMAIN,
+        path="/",
+    )
+
+
+def clear_auth_cookie(response: Response) -> None:
+    response.delete_cookie(
+        key=settings.COOKIE_NAME,
+        httponly=settings.COOKIE_HTTPONLY,
+        samesite=settings.COOKIE_SAMESITE,
+        secure=settings.COOKIE_SECURE or settings.is_production,
+        domain=settings.COOKIE_DOMAIN,
+        path="/",
+    )

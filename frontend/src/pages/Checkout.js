@@ -103,7 +103,9 @@ const Checkout = () => {
         <div className="card shadow-sm border-0 p-5 rounded-4 max-w-md mx-auto">
           <i className="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
           <h3>Your cart is empty</h3>
-          <p className="text-muted">Add some sneakers to your cart before proceeding to checkout.</p>
+          <p className="text-muted">
+            Add some sneakers to your cart before proceeding to checkout.
+          </p>
           <div>
             <Link to="/products" className="btn btn-primary px-4 py-2 mt-2">
               Browse Sneakers
@@ -148,7 +150,9 @@ const Checkout = () => {
                       value={orderData.address}
                       onChange={handleInputChange}
                     ></textarea>
-                    {formErrors.address && <div className="invalid-feedback">{formErrors.address}</div>}
+                    {formErrors.address && (
+                      <div className="invalid-feedback">{formErrors.address}</div>
+                    )}
                   </div>
 
                   <div className="col-md-6">
@@ -181,7 +185,9 @@ const Checkout = () => {
                       onChange={handleInputChange}
                       maxLength="6"
                     />
-                    {formErrors.pincode && <div className="invalid-feedback">{formErrors.pincode}</div>}
+                    {formErrors.pincode && (
+                      <div className="invalid-feedback">{formErrors.pincode}</div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -252,7 +258,8 @@ const Checkout = () => {
             >
               {processing ? (
                 <>
-                  <span className="spinner-border spinner-border-sm me-2"></span> Processing Order...
+                  <span className="spinner-border spinner-border-sm me-2"></span> Processing
+                  Order...
                 </>
               ) : (
                 <>
