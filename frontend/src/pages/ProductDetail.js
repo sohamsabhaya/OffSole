@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import productService from '../api/productService';
 import { useCart } from '../context/CartContext';
@@ -17,23 +17,32 @@ const ProductDetail = () => {
   const [addingToCart, setAddingToCart] = useState(false);
   const [alertInfo, setAlertInfo] = useState(null);
 
-  useEffect(() => {
-    fetchProduct();
-  }, [id]);
-
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       setLoading(true);
       const data = await productService.getProductDetail(id);
-      setProduct(data?.product || data);
-      setError(null);
+      setProduct(data);
+      if (data.available_sizes) {
+        const firstAvailable = Object.keys(data.available_sizes).find(
+          (size) => data.available_sizes[size] === true
+        );
+        if (firstAvailable) {
+          setSelectedSize(firstAvailable);
+        }
+      }
     } catch (err) {
-      setError('Product not found or backend server is unreachable.');
-      console.error('Error fetching product:', err);
+      console.error('Error fetching product details:', err);
+      setError('Failed to load product details. Please try again.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchProduct();
+  }, [fetchProduct]);
+
+  
 
   const handleAddToCart = async () => {
     if (!selectedSize) {

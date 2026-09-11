@@ -74,7 +74,9 @@ const Footer = () => {
                     </h6>
                     <div className="social-links-horizontal">
                       <a
-                        href="#"
+                        href="https://facebook.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="social-link-horizontal"
                         aria-label="Facebook"
                         style={{ color: '#ffffff' }}
@@ -83,7 +85,9 @@ const Footer = () => {
                         <span style={{ color: '#cccccc', marginLeft: '8px' }}>Facebook</span>
                       </a>
                       <a
-                        href="#"
+                        href="https://twitter.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="social-link-horizontal"
                         aria-label="Twitter"
                         style={{ color: '#ffffff' }}
@@ -92,7 +96,9 @@ const Footer = () => {
                         <span style={{ color: '#cccccc', marginLeft: '8px' }}>Twitter</span>
                       </a>
                       <a
-                        href="#"
+                        href="https://instagram.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="social-link-horizontal"
                         aria-label="Instagram"
                         style={{ color: '#ffffff' }}
@@ -101,7 +107,9 @@ const Footer = () => {
                         <span style={{ color: '#cccccc', marginLeft: '8px' }}>Instagram</span>
                       </a>
                       <a
-                        href="#"
+                        href="https://youtube.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="social-link-horizontal"
                         aria-label="YouTube"
                         style={{ color: '#ffffff' }}
