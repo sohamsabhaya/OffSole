@@ -1,15 +1,9 @@
 from fastapi import APIRouter, Depends, Query
-from motor.motor_asyncio import AsyncIOMotorDatabase
 
-from app.database import get_database
 from app.schemas.product import ProductListResponse, ProductResponse
-from app.services.product_service import ProductService
+from app.services import ProductService, get_product_service
 
 router = APIRouter(prefix="/products", tags=["Products"])
-
-
-def get_product_service(db: AsyncIOMotorDatabase = Depends(get_database)) -> ProductService:
-    return ProductService(db)
 
 
 @router.get("/", response_model=ProductListResponse)

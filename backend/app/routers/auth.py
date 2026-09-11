@@ -1,16 +1,10 @@
 from fastapi import APIRouter, Depends, Response, status
-from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.core.deps import get_current_user, get_current_user_optional
-from app.database import get_database
 from app.schemas.auth import AuthStatusResponse, AuthSuccessResponse, UserLogin, UserSignup
-from app.services.auth_service import AuthService
+from app.services import AuthService, get_auth_service
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
-
-
-def get_auth_service(db: AsyncIOMotorDatabase = Depends(get_database)) -> AuthService:
-    return AuthService(db)
 
 
 @router.get("/status/", response_model=AuthStatusResponse)

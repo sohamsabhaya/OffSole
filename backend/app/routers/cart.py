@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends
-from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.core.deps import get_current_user, get_current_user_optional
-from app.database import get_database
 from app.schemas.cart import (
     AddToCartRequest,
     CartCountResponse,
@@ -10,18 +8,14 @@ from app.schemas.cart import (
     UpdateCartItemRequest,
 )
 from app.schemas.orders import OrderSuccessResponse, ProcessOrderRequest
-from app.services.cart_service import CartService
-from app.services.order_service import OrderService
+from app.services import (
+    CartService,
+    OrderService,
+    get_cart_service,
+    get_order_service,
+)
 
 router = APIRouter(prefix="/cart", tags=["Cart & Checkout"])
-
-
-def get_cart_service(db: AsyncIOMotorDatabase = Depends(get_database)) -> CartService:
-    return CartService(db)
-
-
-def get_order_service(db: AsyncIOMotorDatabase = Depends(get_database)) -> OrderService:
-    return OrderService(db)
 
 
 @router.get("/orders/")

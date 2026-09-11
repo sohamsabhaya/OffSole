@@ -9,8 +9,10 @@ from app.crud.product import (
     count_products,
     create_product,
     delete_product,
+    get_products_metadata_map,
     update_product,
 )
+from app.crud.user import count_users
 
 
 class AdminService:
@@ -20,7 +22,7 @@ class AdminService:
     async def get_stats(self) -> dict:
         total_orders = await count_all_orders(self.db)
         total_products = await count_products(self.db)
-        total_users = await self.db.users.count_documents({})
+        total_users = await count_users(self.db)
 
         orders = await get_all_orders(self.db, skip=0, limit=5000)
         total_revenue = sum(float(o.get("total_amount", 0.0)) for o in orders)
@@ -50,17 +52,8 @@ class AdminService:
         color_revenue = defaultdict(float)
         monthly_sales = defaultdict(lambda: {"revenue": 0.0, "orders": 0, "units": 0})
 
-        # Preload products for color/gender enrichment
-        products_cursor = self.db.products.find({})
-        product_meta = {}
-        async for p in products_cursor:
-            pid = str(p.get("_id", ""))
-            product_meta[pid] = {
-                "color": p.get("color", "Multi"),
-                "gender": p.get("gender", "Unisex"),
-                "category": p.get("category", "Lifestyle"),
-                "brand": p.get("brand", "Other"),
-            }
+        # Preload product metadata map from CRUD layer
+        product_meta = await get_products_metadata_map(self.db)
 
         for ord_doc in orders:
             ord_date = ord_doc.get("created_at")

@@ -98,6 +98,19 @@ async def get_products(
     return products
 
 
+async def get_products_metadata_map(db: AsyncIOMotorDatabase) -> dict[str, dict[str, str]]:
+    product_meta = {}
+    async for p in db.products.find({}):
+        pid = str(p.get("_id", p.get("id", "")))
+        product_meta[pid] = {
+            "color": p.get("color", "Multi"),
+            "gender": p.get("gender", "Unisex"),
+            "category": p.get("category", "Lifestyle"),
+            "brand": p.get("brand", "Other"),
+        }
+    return product_meta
+
+
 async def count_products(
     db: AsyncIOMotorDatabase, filter_query: dict[str, Any] | None = None
 ) -> int:

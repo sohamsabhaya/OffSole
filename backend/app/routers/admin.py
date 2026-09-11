@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends, status
-from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.core.deps import get_current_admin_user
-from app.database import get_database
 from app.schemas.admin import (
     AdminStatsResponse,
     ProductCreate,
@@ -10,13 +8,9 @@ from app.schemas.admin import (
     SalesAnalyticsResponse,
 )
 from app.schemas.product import ProductResponse
-from app.services.admin_service import AdminService
+from app.services import AdminService, get_admin_service
 
 router = APIRouter(prefix="/admin", tags=["Admin Dashboard"])
-
-
-def get_admin_service(db: AsyncIOMotorDatabase = Depends(get_database)) -> AdminService:
-    return AdminService(db)
 
 
 @router.get("/stats/", response_model=AdminStatsResponse)

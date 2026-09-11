@@ -32,6 +32,10 @@ async def get_user_by_username(db: AsyncIOMotorDatabase, username: str) -> dict 
     return await db.users.find_one({"username": username.strip()})
 
 
+async def count_users(db: AsyncIOMotorDatabase) -> int:
+    return await db.users.count_documents({})
+
+
 async def create_user(db: AsyncIOMotorDatabase, user_data: dict[str, Any]) -> dict:
     doc = {
         "username": user_data["username"].strip(),
