@@ -1,4 +1,4 @@
-# OffSole ? Frontend
+# OffSole - Frontend
 
 Single Page Application (SPA) for the OffSole sneaker e-commerce platform and Admin Dashboard, built with React 18, React Router v6, and Bootstrap 5.
 
@@ -15,7 +15,7 @@ Single Page Application (SPA) for the OffSole sneaker e-commerce platform and Ad
 
 ## Project Structure
 
-```
+```text
 frontend/
 |-- public/
 |   |-- images/               # Promotional and carousel imagery
@@ -57,6 +57,7 @@ frontend/
 |   |-- App.css
 |   |-- index.js              # Application root
 |   \-- index.css             # Theme styling and customizations
+|-- .prettierrc               # Prettier code formatting rules
 |-- package.json
 \-- README.md
 ```
@@ -71,6 +72,12 @@ npm install
 
 # Start development server
 npm start
+
+# Format code with Prettier
+npm run format
+
+# Build for production
+npm run build
 ```
 
 The application runs on `http://localhost:3000` by default.

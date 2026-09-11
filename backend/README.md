@@ -1,15 +1,39 @@
-# OffSole ? Backend API
+# OffSole - Backend API
 
-FastAPI REST API service for the OffSole sneaker e-commerce platform. Handles MongoDB Atlas persistence, JWT-based authentication via HTTP-only cookies, catalog operations, cart lifecycle, order processing, and administrative analytics.
+FastAPI REST API service for the OffSole sneaker e-commerce platform. Built with a 3-layer architecture (`Router -> Service -> CRUD -> Database`), MongoDB Atlas persistence, JWT-based authentication via secure HTTP-only cookies, catalog operations, cart lifecycle, order processing, and administrative analytics.
+
+---
+
+## Architecture
+
+```
+FastAPI Router (Validation & Auth)
+       |
+       v
+Service Layer (Business Logic, Totals & Validations)
+       |
+       v
+CRUD / Repository Layer (Database Queries)
+       |
+       v
+MongoDB Atlas
+```
 
 ---
 
 ## Core Components
 
-- **Authentication & Security**: Password hashing with Passlib/Bcrypt, signed JWT issuance and verification, role-based access dependencies (`get_current_user`, `get_current_admin_user`).
-- **Product Management**: Filterable catalog queries, pagination, and administrative CRUD operations.
-- **Cart & Orders**: User-associated cart persistence, quantity tracking, and order creation with transaction logs.
-- **Admin Analytics**: Aggregated metrics across revenue, order counts, brand distributions, gender categories, and monthly trends.
+- **Authentication & Security**: Password hashing with native Bcrypt, signed JWT issuance and verification, role-based access dependencies (`get_current_user`, `get_current_admin_user` checking `is_admin` / `role`).
+- **Services Layer**:
+  - `auth_service.py`: Registration, login, cookie setting, logout, account deletion.
+  - `product_service.py`: Catalog filtering, price ranges, search, detail retrieval.
+  - `cart_service.py`: Persistent cart storage, item quantity validation, cart item clearing.
+  - `order_service.py`: Checkout processing, stock deduction, tax and shipping calculations.
+  - `admin_service.py`: Key performance metrics (Revenue, Orders, Units, AOV) and distribution breakdowns (brand, category, gender, colorway, monthly trends).
+- **CRUD Repositories**: Cleanly isolated database access for `user`, `product`, `cart`, and `order`.
+- **Centralized Error Handling**: Custom domain exceptions (`NotFoundError`, `UnauthorizedError`, `ForbiddenError`, `ConflictError`, `BadRequestError`, `StockUnavailableError`).
+- **Database Optimization**: Automated MongoDB index initialization for emails, usernames, product filters, and order history on startup.
+- **API Versioning**: Standard `/api/v1` routes with backward-compatible `/api` aliases.
 
 ---
 
@@ -17,22 +41,24 @@ FastAPI REST API service for the OffSole sneaker e-commerce platform. Handles Mo
 
 - **FastAPI**: Asynchronous web framework
 - **Motor / PyMongo**: Async MongoDB driver
-- **Pydantic v2**: Data validation and serialization
-- **Passlib & Bcrypt**: Password hashing
-- **Python-Jose**: JWT management
+- **Pydantic v2 & Pydantic Settings**: Data validation, serialization, and environment configuration
+- **Bcrypt & Python-Jose**: Password hashing and JWT management
+- **Pytest & Mongomock-Motor**: Isolated unit and integration testing suite
+- **Ruff**: High-performance Python linter and formatter
 - **Uvicorn**: ASGI application server
 
 ---
 
 ## Project Structure
 
-```
+```text
 backend/
 |-- app/
 |   |-- core/
 |   |   |-- config.py         # Application settings loaded from .env
 |   |   |-- database.py       # MongoDB client and collection handles
-|   |   |-- deps.py           # Dependency injection for auth and roles
+|   |   |-- deps.py           # Dependency injection for auth and admin roles
+|   |   |-- exceptions.py     # Custom application domain exceptions
 |   |   \-- security.py       # Password hashing and token utilities
 |   |-- crud/
 |   |   |-- cart.py           # Cart database operations
@@ -40,18 +66,26 @@ backend/
 |   |   |-- product.py        # Product catalog queries
 |   |   \-- user.py           # User account queries
 |   |-- routers/
-|   |   |-- admin.py          # /api/admin endpoints (analytics, logs, CRUD)
-|   |   |-- auth.py           # /api/auth endpoints (login, register, me, delete)
-|   |   |-- cart.py           # /api/cart endpoints (cart management, checkout)
-|   |   \-- products.py       # /api/products endpoints (catalog listing, details)
+|   |   |-- admin.py          # /api/v1/admin endpoints
+|   |   |-- auth.py           # /api/v1/auth endpoints
+|   |   |-- cart.py           # /api/v1/cart endpoints
+|   |   \-- products.py       # /api/v1/products endpoints
 |   |-- schemas/
 |   |   |-- admin.py          # Pydantic schemas for analytics and dashboards
 |   |   |-- auth.py           # Schemas for user registration and auth responses
 |   |   |-- cart.py           # Schemas for cart items and payloads
 |   |   |-- orders.py         # Schemas for order records and transactions
 |   |   \-- product.py        # Schemas for product models
+|   |-- services/
+|   |   |-- admin_service.py  # Sales KPI calculations and inventory management
+|   |   |-- auth_service.py   # User registration, login, and token issuance
+|   |   |-- cart_service.py   # Cart operations and quantity validation
+|   |   |-- order_service.py  # Checkout calculation and order creation
+|   |   \-- product_service.py# Catalog querying and filtering logic
 |   \-- main.py               # FastAPI application setup and middleware
 |-- media/                    # Static image directory for product assets
+|-- tests/                    # 20 automated tests for auth, products, cart, orders, and admin
+|-- pyproject.toml            # Ruff linter and Pytest configuration
 |-- requirements.txt          # Python dependencies
 |-- .env.example              # Sample environment configuration
 \-- README.md
@@ -85,6 +119,18 @@ source venv/bin/activate
 
 # Start server
 uvicorn app.main:app --reload --port 8000
+```
+
+---
+
+## Running Tests & Linting
+
+```bash
+# Run test suite
+pytest -v
+
+# Run Ruff linter
+ruff check .
 ```
 
 ---
