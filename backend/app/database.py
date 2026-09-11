@@ -17,11 +17,18 @@ db_instance = Database()
 
 
 async def connect_to_mongo() -> None:
+    if settings.ENV == "testing":
+        logger.info("Testing environment active: skipping live MongoDB connection in lifespan.")
+        return
+
     logger.info("Connecting to MongoDB...")
-    db_instance.client = AsyncIOMotorClient(settings.MONGODB_URL, serverSelectionTimeoutMS=5000)
-    db_instance.db = db_instance.client[settings.DATABASE_NAME]
-    logger.info(f"Connected to MongoDB database: {settings.DATABASE_NAME}")
-    await init_db_indexes(db_instance.db)
+    try:
+        db_instance.client = AsyncIOMotorClient(settings.MONGODB_URL, serverSelectionTimeoutMS=5000)
+        db_instance.db = db_instance.client[settings.DATABASE_NAME]
+        logger.info(f"Connected to MongoDB database: {settings.DATABASE_NAME}")
+        await init_db_indexes(db_instance.db)
+    except Exception as e:
+        logger.warning(f"Could not connect to MongoDB during startup: {e}")
 
 
 async def close_mongo_connection() -> None:
