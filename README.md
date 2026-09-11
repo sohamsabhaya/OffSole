@@ -41,37 +41,37 @@ OffSole is a full-stack sneaker e-commerce platform built with FastAPI, MongoDB 
 
 ## Repository Structure
 
-```
+```text
 OffSole/
-|-- backend/
-|   |-- app/
-|   |   |-- core/           # Security utilities, JWT encoding, auth dependencies
-|   |   |-- crud/           # Database query functions (products, orders, users, cart)
-|   |   |-- routers/        # API endpoints (auth, products, cart, admin)
-|   |   |-- schemas/        # Pydantic data validation models
-|   |   |-- config.py       # Pydantic settings loaded from environment
-|   |   |-- database.py     # MongoDB connection setup and collection handles
-|   |   \-- main.py         # FastAPI entry point, CORS, and router registration
-|   |-- media/              # Locally served product image assets
-|   |-- requirements.txt    # Python dependencies
-|   |-- .env.example        # Environment variable template
-|   \-- README.md           # Backend documentation
-|
-|-- frontend/
-|   |-- public/             # Static HTML template and favicon
-|   |-- src/
-|   |   |-- api/            # Axios API client modules
-|   |   |-- components/     # Reusable UI components (Navbar, Footer, ProductCard)
-|   |   |-- context/        # React Context providers (AuthContext, CartContext)
-|   |   |-- pages/          # Application views (Home, Products, AdminDashboard, Cart, etc.)
-|   |   |-- utils/          # Formatting and validation helper functions
-|   |   |-- App.js          # Route definitions and layout wrapper
-|   |   \-- index.js        # React DOM mount point
-|   |-- package.json        # Frontend dependencies and npm scripts
-|   \-- README.md           # Frontend documentation
-|
-|-- .gitignore              # Git ignore rules for node_modules, venv, and .env
-\-- README.md               # Main project documentation
+??? backend/
+?   ??? app/
+?   ?   ??? core/           # Security utilities, JWT encoding, auth dependencies
+?   ?   ??? crud/           # Database query functions (products, orders, users, cart)
+?   ?   ??? routers/        # API endpoints (auth, products, cart, admin)
+?   ?   ??? schemas/        # Pydantic data validation models
+?   ?   ??? config.py       # Pydantic settings loaded from environment
+?   ?   ??? database.py     # MongoDB connection setup and collection handles
+?   ?   ??? main.py         # FastAPI entry point, CORS, and router registration
+?   ??? media/              # Locally served product image assets
+?   ??? requirements.txt    # Python dependencies
+?   ??? .env.example        # Environment variable template
+?   ??? README.md           # Backend documentation
+?
+??? frontend/
+?   ??? public/             # Static HTML template and favicon
+?   ??? src/
+?   ?   ??? api/            # Axios API client modules
+?   ?   ??? components/     # Reusable UI components (Navbar, Footer, ProductCard)
+?   ?   ??? context/        # React Context providers (AuthContext, CartContext)
+?   ?   ??? pages/          # Application views (Home, Products, AdminDashboard, Cart, etc.)
+?   ?   ??? utils/          # Formatting and validation helper functions
+?   ?   ??? App.js          # Route definitions and layout wrapper
+?   ?   ??? index.js        # React DOM mount point
+?   ??? package.json        # Frontend dependencies and npm scripts
+?   ??? README.md           # Frontend documentation
+?
+??? .gitignore              # Git ignore rules for node_modules, venv, and .env
+??? README.md               # Main project documentation
 ```
 
 ---
@@ -97,7 +97,7 @@ Create and activate a Python virtual environment:
 **Windows (PowerShell):**
 ```powershell
 python -m venv venv
-.env\Scripts\Activate.ps1
+.\venv\Scripts\Activate.ps1
 ```
 
 **Linux / macOS:**
