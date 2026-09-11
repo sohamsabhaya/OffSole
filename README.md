@@ -1,80 +1,78 @@
 # OffSole
 
-OffSole is a full-stack sneaker e-commerce platform built with FastAPI, MongoDB Atlas, and React. The application features user authentication, catalog browsing with dynamic filtering, shopping cart checkout workflows, user profile management, and an administrative dashboard with sales analytics and product inventory control.
+OffSole is a full-stack sneaker e-commerce platform built with FastAPI, MongoDB Atlas, and React 18. The application provides dynamic catalog filtering, cart and checkout workflows, JWT cookie-based session management, self-service account lifecycle features, and an administrative dashboard with sales analytics and product inventory control.
 
 ---
 
 ## Features
 
 ### Storefront & Customer Experience
-- **Product Catalog**: Multi-attribute filtering (brand, category, gender, colorway, size) with price sorting and keyword search.
-- **Product Details**: High-resolution image preview, real-time stock availability, and size selection.
-- **Cart & Checkout**: Persistent cart management, quantity controls, and streamlined checkout processing.
-- **User Authentication**: Secure JWT-based authentication with HTTP-only cookies, password hashing with bcrypt, and self-service account deletion.
+- **Dynamic Catalog Filtering**: Multi-attribute filtering by brand, category, gender, colorway, and size with real-time price sorting and keyword search.
+- **Product Details**: High-resolution image preview, real-time stock indicator, and size selector.
+- **Cart & Checkout**: Persistent cart storage, quantity adjustments, order summary calculations, and checkout processing.
+- **User Authentication**: Secure HTTP-only JWT cookies, bcrypt password hashing, session persistence, and self-service account deletion.
 
-### Admin Dashboard & Management
-- **Sales Analytics**:
-  - Key performance indicators: Total Revenue, Orders Count, Units Sold, and Average Order Value (AOV).
+### Admin Dashboard & Analytics
+- **Sales KPI Metrics**: Total Revenue, Orders Count, Units Sold, and Average Order Value (AOV).
+- **Visual Charts & Trends**:
   - Monthly revenue and order volume trends.
-  - Distribution breakdown by brand, product category, gender, and colorway.
-- **Order Logs**: Chronological audit trail of customer transactions with item-level breakdowns.
-- **Inventory Management**: Create, update, and remove products with image asset management.
+  - Brand market share distribution (Pie / Donut chart).
+  - Category and Gender distribution breakdowns.
+  - Colorway sales distribution.
+- **Recent Transactions Log**: Chronological audit trail of customer purchases with item-level breakdowns and status.
+- **Inventory Management**: Create new sneaker listings, update prices/stock/details, and delete discontinued products.
 
 ---
 
 ## Tech Stack
 
-### Backend
-- **FastAPI**: Asynchronous Python web framework for REST APIs
-- **MongoDB Atlas & Motor**: Async document database for products, users, carts, and order records
-- **Pydantic v2**: Request/response schema validation and settings management
-- **Passlib & Bcrypt**: Password hashing and verification
-- **Python-Jose**: Cryptographic JWT generation and validation
-- **Uvicorn**: ASGI server implementation
-
-### Frontend
-- **React 18**: Component-based user interface architecture
-- **React Router v6**: Client-side routing and protected navigation guards
-- **Bootstrap 5**: Responsive layout grid and modern UI components
-- **Recharts**: Data visualization for administrative metrics and charts
-- **Axios**: HTTP client configured for cross-origin credentials
+| Layer | Technology | Description |
+|---|---|---|
+| Backend API | FastAPI | Asynchronous Python REST API framework |
+| Database | MongoDB Atlas & Motor | Async NoSQL database for products, users, carts, and orders |
+| Authentication | Python-Jose & Passlib | JWT in secure HTTP-only cookies, bcrypt password hashing |
+| Frontend | React 18 & React Router v6 | Single Page Application with protected navigation routes |
+| Styling | Bootstrap 5 | Responsive UI layout and modern CSS styling |
+| Data Visualization | Recharts | Interactive charts for admin sales analytics |
+| HTTP Client | Axios | Configured with cross-origin credentials (withCredentials: true) |
+| Server | Uvicorn | ASGI production server |
 
 ---
 
-## Directory Structure
+## Repository Structure
 
-`	ext
+```
 OffSole/
-├── backend/
-│   ├── app/
-│   │   ├── core/           # Security, auth dependencies, JWT configuration
-│   │   ├── crud/           # Database operations (products, orders, users, cart)
-│   │   ├── routers/        # Route endpoints (auth, products, cart, admin)
-│   │   ├── schemas/        # Pydantic data validation schemas
-│   │   ├── config.py       # Environment configuration
-│   │   ├── database.py     # MongoDB connection setup
-│   │   └── main.py         # FastAPI application entry point
-│   ├── media/              # Product image assets
-│   ├── requirements.txt    # Python dependencies
-│   ├── .env.example        # Environment variable template
-│   └── README.md
-│
-├── frontend/
-│   ├── public/             # Static assets and HTML entry
-│   ├── src/
-│   │   ├── api/            # API client modules
-│   │   ├── components/     # Reusable layout and feature components
-│   │   ├── context/        # React Context providers (Auth, Cart)
-│   │   ├── pages/          # Application views and routes
-│   │   ├── utils/          # Formatting and validation helpers
-│   │   ├── App.js          # Route definitions
-│   │   └── index.js        # React DOM mount point
-│   ├── package.json        # Frontend dependencies and scripts
-│   └── README.md
-│
-├── .gitignore
-└── README.md
-`
+|-- backend/
+|   |-- app/
+|   |   |-- core/           # Security utilities, JWT encoding, auth dependencies
+|   |   |-- crud/           # Database query functions (products, orders, users, cart)
+|   |   |-- routers/        # API endpoints (auth, products, cart, admin)
+|   |   |-- schemas/        # Pydantic data validation models
+|   |   |-- config.py       # Pydantic settings loaded from environment
+|   |   |-- database.py     # MongoDB connection setup and collection handles
+|   |   \-- main.py         # FastAPI entry point, CORS, and router registration
+|   |-- media/              # Locally served product image assets
+|   |-- requirements.txt    # Python dependencies
+|   |-- .env.example        # Environment variable template
+|   \-- README.md           # Backend documentation
+|
+|-- frontend/
+|   |-- public/             # Static HTML template and favicon
+|   |-- src/
+|   |   |-- api/            # Axios API client modules
+|   |   |-- components/     # Reusable UI components (Navbar, Footer, ProductCard)
+|   |   |-- context/        # React Context providers (AuthContext, CartContext)
+|   |   |-- pages/          # Application views (Home, Products, AdminDashboard, Cart, etc.)
+|   |   |-- utils/          # Formatting and validation helper functions
+|   |   |-- App.js          # Route definitions and layout wrapper
+|   |   \-- index.js        # React DOM mount point
+|   |-- package.json        # Frontend dependencies and npm scripts
+|   \-- README.md           # Frontend documentation
+|
+|-- .gitignore              # Git ignore rules for node_modules, venv, and .env
+\-- README.md               # Main project documentation
+```
 
 ---
 
@@ -83,80 +81,87 @@ OffSole/
 ### Prerequisites
 - Python 3.11 or higher
 - Node.js 18 or higher with npm
-- MongoDB Atlas cluster or local MongoDB instance
+- MongoDB Atlas cluster or a local MongoDB database
 
 ---
 
-### Backend Setup
+### 1. Backend Setup
 
-1. Navigate to the backend directory:
-   `ash
-   cd backend
-   `
+Navigate to the backend directory:
+```bash
+cd backend
+```
 
-2. Create and activate a Python virtual environment:
-   `ash
-   # Windows (PowerShell)
-   python -m venv venv
-   .\venv\Scripts\Activate.ps1
+Create and activate a Python virtual environment:
 
-   # Linux / macOS
-   python3 -m venv venv
-   source venv/bin/activate
-   `
+**Windows (PowerShell):**
+```powershell
+python -m venv venv
+.env\Scripts\Activate.ps1
+```
 
-3. Install required packages:
-   `ash
-   pip install -r requirements.txt
-   `
+**Linux / macOS:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-4. Configure environment variables:
-   `ash
-   cp .env.example .env
-   `
-   Edit .env with your database credentials and secret key:
-   `env
-   MONGODB_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/offsole?retryWrites=true&w=majority
-   DATABASE_NAME=offsole
-   SECRET_KEY=your_secure_secret_key_here
-   ACCESS_TOKEN_EXPIRE_MINUTES=1440
-   ALLOWED_ORIGINS=http://localhost:3000
-   MEDIA_DIR=media
-   `
+Install required Python packages:
+```bash
+pip install -r requirements.txt
+```
 
-5. Start the backend development server:
-   `ash
-   uvicorn app.main:app --reload --port 8000
-   `
-   The interactive API documentation will be available at http://localhost:8000/docs.
+Configure environment variables:
+```bash
+cp .env.example .env
+```
+
+Set your configuration values inside `backend/.env`:
+```env
+MONGODB_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/offsole?retryWrites=true&w=majority
+DATABASE_NAME=offsole
+SECRET_KEY=your_secure_secret_key_here
+ACCESS_TOKEN_EXPIRE_MINUTES=1440
+ALLOWED_ORIGINS=http://localhost:3000
+MEDIA_DIR=media
+```
+
+Start the FastAPI server:
+```bash
+uvicorn app.main:app --reload --port 8000
+```
+
+Interactive Swagger API documentation will be available at `http://localhost:8000/docs`.
 
 ---
 
-### Frontend Setup
+### 2. Frontend Setup
 
-1. Open a separate terminal and navigate to the frontend directory:
-   `ash
-   cd frontend
-   `
+Open a separate terminal and navigate to the frontend directory:
+```bash
+cd frontend
+```
 
-2. Install npm dependencies:
-   `ash
-   npm install
-   `
+Install npm dependencies:
+```bash
+npm install
+```
 
-3. Start the development server:
-   `ash
-   npm start
-   `
-   The application will be accessible at http://localhost:3000.
+Start the development server:
+```bash
+npm start
+```
+
+The application will be accessible in your browser at `http://localhost:3000`.
 
 ---
 
 ## Admin Access
 
-1. Log in with an administrator account (ensure is_admin: true is set on the user document in MongoDB).
-2. The **Admin Dashboard** option will appear in the navigation bar, linking to /admin.
-3. Administrative routes and dashboard APIs are guarded to prevent unauthorized access.
+1. Register an account or sign in through the UI.
+2. In your MongoDB `users` collection, set `"is_admin": true` on the corresponding user document.
+3. Upon refreshing the page, the **Admin Dashboard** option will appear in the navigation bar, linking to `/admin`.
+4. Admin accounts have exclusive access to administrative metrics, product CRUD operations, and transaction audit logs.
 
 ---
 
